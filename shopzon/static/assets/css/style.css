@@ -220,7 +220,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   visibility: hidden;
   pointer-events: none;
   z-index: 10;
-  animation: popup 1s ease-in-out 5s forwards;
+  animation: popup 1s ease-in-out 10s forwards;
 }
 
 @keyframes popup {
@@ -259,7 +259,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   border-radius: var(--border-radius-md);
   overflow: hidden;
   z-index: 2;
-  animation: scaleUp 0.5s ease-in-out 5s forwards;
+  animation: scaleUp 0.5s ease-in-out 10s forwards;
 }
 
 @keyframes scaleUp {
@@ -689,7 +689,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .banner-subtitle {
-  color: var(--salmon-pink);
+  color: var(--onyx);
   font-size: var(--fs-7);
   font-weight: var(--weight-500);
   text-transform: capitalize;
@@ -705,7 +705,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   margin-bottom: 10px;
 }
 
-.banner-text { display: none; }
+.banner-text { display: none }
 
 .banner-btn {
   background: var(--salmon-pink);
@@ -719,7 +719,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   transition: var(--transition-timing);
 }
 
-.banner-btn:hover { background: var(--eerie-black); }
+.banner-btn:hover { background: var(--eerie-black); color:var(--salmon-pink)}
 
 
 
@@ -875,12 +875,12 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   max-height: 0;
   overflow: hidden;
   visibility: hidden;
-  transition: 0.5s ease-in-out;
+  transition: 0.4s ease;
 }
 
 .sidebar-submenu-category-list.active {
   padding: 13px 0 8px;
-  max-height: 122px;
+  max-height: 300px;
   visibility: visible;
 }
 
@@ -2289,7 +2289,9 @@ footer {
 
   .panel-list-item a:hover { color: var(--salmon-pink); }
 
-  .panel-list-item:not(:last-child) a { padding: 4px 0; }
+  .panel-list-item a { padding:4px 0}
+
+  /* .panel-list-item:not(:last-child) a { padding: 4px 0; }
 
   .panel-list-item:last-child { margin-top: 20px; }
 
@@ -2297,7 +2299,7 @@ footer {
     width: 100%;
     height: auto;
     border-radius: var(--border-radius-sm);
-  }
+  } */
 
   .dropdown-list {
     position: absolute;
