@@ -6,17 +6,17 @@
   </button>
 
   <div class="toast-banner">
-    <img src="{% static "./assets/images/products/jewellery-1.jpg" %}" alt="Rose Gold Earrings" width="80" height="70">
+    <img src="{{ product.images.url }}" alt="Rose Gold Earrings" width="80" height="70">
   </div>
 
   <div class="toast-detail">
 
     <p class="toast-message">
-      Someone in new just bought
+      Someone just bought
     </p>
 
     <p class="toast-title">
-      Rose Gold Earrings
+      {{product.name}}
     </p>
 
     <p class="toast-meta">

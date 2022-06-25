@@ -1158,7 +1158,6 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   top: 3px;
   left: 3px;
   height: 4px;
-  width: 40%;
   background: var(--salmon-pink);
   border-radius: 4px;
 }
@@ -1193,6 +1192,50 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .product-featured .display-text {
   color: var(--davys-gray);
   font-size: var(--fs-11);
+}
+
+.w-0::before {
+  width: 2%;
+}
+
+.w-1::before {
+  width: 12%;
+}
+
+.w-2::before {
+  width: 22%;
+}
+
+.w-3::before {
+  width: 32%;
+}
+
+.w-4::before {
+  width: 42%;
+}
+
+.w-5::before {
+  width: 52%;
+}
+
+.w-6::before {
+  width: 62%;
+}
+
+.w-7::before {
+  width: 72%;
+}
+
+.w-8::before {
+  width: 82%;
+}
+
+.w-9::before {
+  width: 92%;
+}
+
+.w-10::before {
+  width: 100%;
 }
 
 

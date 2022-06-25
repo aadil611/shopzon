@@ -16,7 +16,6 @@ class Category(models.Model):
 
   def subcategories(self):
     subcat = SubCategory.objects.filter(category__id=self.id)
-    print(subcat.count())
     return subcat
 
 class SubCategory(models.Model):
