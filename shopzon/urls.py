@@ -19,9 +19,11 @@ from .import views
 from django.conf import settings
 from django.conf.urls.static import static
 from category.views import get_sub_category
+from store import views as storeviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/',views.home,name='home'),
-    path('get_sub_category/',get_sub_category)
+    path('get_sub_category/',get_sub_category),
+    path('get_notification/',storeviews.get_notification)
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

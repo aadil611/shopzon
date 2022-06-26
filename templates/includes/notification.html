@@ -6,7 +6,7 @@
   </button>
 
   <div class="toast-banner">
-    <img src="{{ product.images.url }}" alt="Rose Gold Earrings" width="80" height="70">
+    <img id="not_img" src="{{ product.images.url }}" alt="Rose Gold Earrings" width="80" height="70">
   </div>
 
   <div class="toast-detail">
@@ -15,11 +15,11 @@
       Someone just bought
     </p>
 
-    <p class="toast-title">
+    <p class="toast-title" id="not_name">
       {{product.name}}
     </p>
 
-    <p class="toast-meta">
+    <p class="toast-meta" id="not_time">
       <time datetime="PT2M">2 Minutes</time> ago
     </p>
 

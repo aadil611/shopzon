@@ -86,3 +86,21 @@ for (let i = 0; i < accordionBtn.length; i++) {
   });
 
 }
+
+var notification_url = "http://127.0.0.1:8000/get_notification/"
+var toastTitle = document.getElementById('not_name');
+var toastImg   = document.getElementById('not_img');
+var toastTime  = document.getElementById('not_time');
+
+setInterval(function() {
+  fetch(notification_url).
+  then((response) => {
+    response.json().then((data) => {
+      toastTitle.textContent = data.name;
+      toastImg.setAttribute('src',data.url);
+      toastTime.children[0].textContent = data.time + "Minutes";
+    })
+  }).catch((error) => {
+    console.log(error);
+  })
+},10000)

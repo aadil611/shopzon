@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'category',
     'accounts',
-    'store'
+    'store',
+    'channels',
+    'utils',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'shopzon.wsgi.application'
+ASGI_APPLICATION = 'shopzon.asgi.application'
 AUTH_USER_MODEL = 'accounts.Account'
 
 
@@ -82,6 +85,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# CHANNEL_LAYERS CONFIGURATION
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1',6379)],
+        },
     }
 }
 
