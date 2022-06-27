@@ -11,9 +11,9 @@
 
       <div class="header-search-container">
 
-        <input type="search" name="search" class="search-field" placeholder="Enter your product name...">
+        <input type="search" name="search" id="search-field" class="search-field" placeholder="Enter your product name...">
 
-        <button class="search-btn">
+        <button class="search-btn" id="search-btn">
           <ion-icon name="search-outline"></ion-icon>
         </button>
 
@@ -48,7 +48,7 @@
       <ul class="desktop-menu-category-list">
 
         <li class="menu-category">
-          <a href="#" class="menu-title">Home</a>
+          <a href="{% url 'home' %}" class="menu-title">Home</a>
         </li>
 
         <li class="menu-category">
@@ -59,12 +59,12 @@
               <ul class="dropdown-panel-list">
 
                 <li class="menu-title">
-                  <a href="#">{{category.category_name}}</a>
+                  <a href="{% url 'products' category.slug %}">{{category.category_name}}</a>
                 </li>
 
                 {% for subcategory in category.subcategories %}
                   <li class="panel-list-item">
-                    <a href="#">{{subcategory.name}}</a>
+                    <a href="{% url 'products' subcategory.slug %}">{{subcategory.name}}</a>
                   </li>
                 {% endfor %}
 

@@ -3,6 +3,7 @@ from random import choice
 from store.models import Product
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from category.models import Category
 
 channel_layer = get_channel_layer()
 
@@ -26,3 +27,9 @@ def notification(request):
     product = dict({'product':product})
     print(product)
     return product
+
+def categories(request):
+    categories = Category.objects.all()
+    # categories = dict({'categories':categories})
+    context = {'categories':categories}
+    return context

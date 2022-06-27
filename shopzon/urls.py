@@ -20,10 +20,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from category.views import get_sub_category
 from store import views as storeviews
+from utils import views as utilsviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/',views.home,name='home'),
     path('get_sub_category/',get_sub_category),
-    path('get_notification/',storeviews.get_notification)
+    path('get_notification/',storeviews.get_notification),
+    path('get_countdown/',utilsviews.get_countdown),
+    path('products/<slug:category_slug>/',storeviews.products,name='products'),
+    path('search/<str:keyword>/',storeviews.search,name='search'),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
