@@ -29,5 +29,6 @@ urlpatterns = [
     path('get_notification/',storeviews.get_notification),
     path('get_countdown/',utilsviews.get_countdown),
     path('products/<slug:category_slug>/',storeviews.products,name='products'),
-    path('search/<str:keyword>/',storeviews.search,name='search'),
+    path('search/',storeviews.search,name='search'),
+    path('product_details/<slug:slug>/',storeviews.product_details,name='product_details'),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

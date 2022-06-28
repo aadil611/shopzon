@@ -34,13 +34,31 @@ def get_notification(request):
   return HttpResponse(json.dumps(product))
 
 
-def search(request,keyword):
-  # keyword = request.args.get('keyword')
-  products = Product.objects.filter(name__contains=keyword)
-  products_count = products.count()
-  context = {
-    'products':products,
-    'products_count':products_count
-  }
+def search(request):
+  if request.method == 'GET':
+    keyword = request.GET.get('search')
+    try:
+      category = Category.objects.get(slug=keyword)
+      products = Product.objects.filter(category=category)
+    except:
+      try:
+        subcategory = SubCategory.objects.get(slug=keyword)
+        products = Product.objects.filter(sub_category=subcategory)
+      except:
+        products = Product.objects.filter(name__contains=keyword)
+
+    products_count = products.count()
+    context = {
+      'products':products,
+      'products_count':products_count
+    }
 
   return render(request,'products.html',context)
+
+
+def product_details(request,slug):
+  product = get_object_or_404(Product, slug=slug)
+  context = {
+    'product':product
+  }
+  return render(request,'product_details.html',context)
