@@ -30,6 +30,7 @@ def get_notification(request):
     'name': product.name,
     'url' : product.images.url,
     'time': randint(1, 10),
+    'href': '/product_details/' + product.slug,
   }
   return HttpResponse(json.dumps(product))
 

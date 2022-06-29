@@ -32,8 +32,8 @@ for (let i = 0; i < accordionBtn.length; i++) {
 }
 
 
-
-if( window.location.pathname === '/home/') {
+console.log(window.location.pathname);
+if( window.location.pathname === '/') {
   // modal variables
   const modal = document.querySelector('[data-modal]');
   const modalCloseBtn = document.querySelector('[data-modal-close]');
@@ -90,10 +90,12 @@ if( window.location.pathname === '/home/') {
 
 
 
-  var notification_url = "http://127.0.0.1:8000/get_notification/"
-  var toastTitle = document.getElementById('not_name');
-  var toastImg   = document.getElementById('not_img');
-  var toastTime  = document.getElementById('not_time');
+  var notification_url    = "http://127.0.0.1:8000/get_notification/"
+  var toastTitle          = document.getElementById('not_name');
+  var toastImg            = document.getElementById('not_img');
+  var toastTime           = document.getElementById('not_time');
+  var toastImgHref        = document.getElementById('not_img_href');
+  var toastNameHref       = document.getElementById('not_name_href');
 
   setInterval(function() {
     fetch(notification_url).
@@ -102,6 +104,10 @@ if( window.location.pathname === '/home/') {
         toastTitle.textContent = data.name;
         toastImg.setAttribute('src',data.url);
         toastTime.children[0].textContent = data.time + " Minutes";
+        console.log(toastImgHref.href,toastNameHref.href);
+        console.log(host);
+        toastImgHref.href = data.href;
+        toastNameHref.href = data.href;
       })
     }).catch((error) => {
       console.log(error);
@@ -149,23 +155,25 @@ if( window.location.pathname === '/home/') {
 
 /**************Product details page functions ************** */
 
-const allHoverImages = document.querySelectorAll('.hover-container div img');
-const imgContainer = document.querySelector('.img-container');
+if( window.location.pathname.indexOf('/product_details/') >= 0 ) {
+  const allHoverImages = document.querySelectorAll('.hover-container div img');
+  const imgContainer = document.querySelector('.img-container');
 
-window.addEventListener('DOMContentLoaded', () => {
-    allHoverImages[0].parentElement.classList.add('active');
-});
+  window.addEventListener('DOMContentLoaded', () => {
+      allHoverImages[0].parentElement.classList.add('active');
+  });
 
-allHoverImages.forEach((image) => {
-    image.addEventListener('mouseover', () =>{
-        imgContainer.querySelector('img').src = image.src;
-        resetActiveImg();
-        image.parentElement.classList.add('active');
-    });
-});
+  allHoverImages.forEach((image) => {
+      image.addEventListener('mouseover', () =>{
+          imgContainer.querySelector('img').src = image.src;
+          resetActiveImg();
+          image.parentElement.classList.add('active');
+      });
+  });
 
-function resetActiveImg(){
-    allHoverImages.forEach((img) => {
-        img.parentElement.classList.remove('active');
-    });
+  function resetActiveImg(){
+      allHoverImages.forEach((img) => {
+          img.parentElement.classList.remove('active');
+      });
+  }
 }

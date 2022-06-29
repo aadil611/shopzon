@@ -33,8 +33,10 @@
         </button>
 
         <button class="action-btn">
-          <ion-icon name="bag-handle-outline"></ion-icon>
-          <span class="count">0</span>
+          <a href="{% url 'cart' %}">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="count">0</span>
+          </a>
         </button>
 
       </div>
@@ -43,6 +45,7 @@
 
   </div>
 
+  {% if 'cart/' not in request.path %}
   <nav class="desktop-navigation-menu">
 
     <div class="container">
@@ -256,5 +259,6 @@
     </ul>
 
   </nav>
+  {% endif %}
 
 </header>
