@@ -39,10 +39,17 @@
                     <span>(350 ratings)</span>
                 </div>
                 <p class = "product-description">{{product.description}}</p>
-                <div class = "btn-groups">
-                    <button type = "button" class = "add-cart-btn"><i class = "fas fa-shopping-cart"></i>add to cart</button>
-                    <button type = "button" class = "buy-now-btn"><i class = "fas fa-wallet"></i>buy now</button>
-                </div>
+                {% if in_stock %}
+                  <div class = "btn-groups">
+                    <a href="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart"></i> add to cart</a>
+                   <button type = "button" class = "buy-now-btn btn"> <a href="#" style="color:white;"><i class = "fas fa-wallet"></i>buy now </a></button>
+                  </div>
+                {% else %}
+                  <div class = "btn-groups">
+                    <h2 style="color:red;"> Out Of Stock </h2><br>
+                    <button type = "button" class = "buy-now-btn" title="We will notify once item in stock"><i class = "fas fa-bell"></i>Notify</button>
+                  </div>
+                {% endif %}
             </div>
         </div>
     </div>

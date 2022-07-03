@@ -32,7 +32,7 @@ for (let i = 0; i < accordionBtn.length; i++) {
 }
 
 
-console.log(window.location.pathname);
+// console.log(window.location.pathname);
 if( window.location.pathname === '/') {
   // modal variables
   const modal = document.querySelector('[data-modal]');

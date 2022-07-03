@@ -59,7 +59,9 @@ def search(request):
 
 def product_details(request,slug):
   product = get_object_or_404(Product, slug=slug)
+  in_stock = True if product.stock >= 1 else False
   context = {
-    'product':product
+    'product':product,
+    'in_stock':in_stock,
   }
   return render(request,'product_details.html',context)

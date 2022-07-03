@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load store_filters %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/wishlist.css' %}" >
+{% endblock %}
+
+{% block content %}
+
+  {% if empty %}
+    <div style="text-align:center;">
+      <h2 class="empty-msg">Your WishList is Empty </h2>
+      <a href="{% url 'home' %}"> go to home page </a>
+    </div>
+  {% else %}
+    <div class="small-container wishlist-page">
+
+      <table>
+        <col style="width:70%;">
+        <col style="width:20%;">
+        <tr>
+          <th>Products</th>
+          <th id="action-column">Action </th>
+        </tr>
+
+        {% for item in wishlist %}
+          <tr>
+            <td>
+              <div class="wishlist-info">
+                <div class="wishlist-data">
+                  <a href="{% url 'product_details' item.product.slug %}">
+                  <img src="{{ item.product.images.url }}" alt=""">
+                  </a>
+                  <div>
+                    <a href="{% url 'product_details' item.product.slug %}">
+                      <p class="product-name">{{item.product.name}}</p>
+                    </a>
+                    <small>Price: &#8377; {{item.product.price}}</small>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>  
+              <div class="wishlist-btn">
+                <a href="{% url 'remove_wishlist' item.product.id %}" >Remove</a>
+                <a href="{% url 'add_cart' item.product.id %}"> move to cart </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+        
+      </table>
+
+    </div>
+  {% endif %}
+  
+{% endblock %}

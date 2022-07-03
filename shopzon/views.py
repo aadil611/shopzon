@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from category.models import Category
 from store.models import Product
-from random import choices
+from random import choice
 
 def home(request):
   categories = Category.objects.all().order_by('category_name')
@@ -12,6 +12,7 @@ def home(request):
   context = {
     'categories': categories,
     'new_products': new_products,
-    'deals_of_the_day':deals_of_the_day
+    'deals_of_the_day':deals_of_the_day,
+    'product': choice(Product.objects.all())
   }
   return render(request,'home.html',context)

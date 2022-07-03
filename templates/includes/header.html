@@ -28,14 +28,16 @@
         </button>
 
         <button class="action-btn">
-          <ion-icon name="heart-outline"></ion-icon>
-          <span class="count">0</span>
+          <a href="{% url 'show_wishlist' %}">
+            <ion-icon name="heart-outline"></ion-icon>
+            <span class="count">{{wishlist_count}}</span>
+          </a>
         </button>
 
         <button class="action-btn">
           <a href="{% url 'cart' %}">
             <ion-icon name="bag-handle-outline"></ion-icon>
-            <span class="count">0</span>
+            <span class="count">{{cart_count}}</span>
           </a>
         </button>
 
@@ -183,6 +185,7 @@
 
   </nav>
 
+  {% endif %}
   <div class="mobile-bottom-navigation">
 
     <button class="action-btn" data-mobile-menu-open-btn>
@@ -190,19 +193,23 @@
     </button>
 
     <button class="action-btn">
-      <ion-icon name="bag-handle-outline"></ion-icon>
-
-      <span class="count">0</span>
+      <a href="{% url 'cart' %}">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        <span class="count">{{cart_count}}</span>
+      </a>
     </button>
 
     <button class="action-btn">
+      <a href="{% url 'home' %}">
       <ion-icon name="home-outline"></ion-icon>
+      </a>
     </button>
 
     <button class="action-btn">
-      <ion-icon name="heart-outline"></ion-icon>
-
-      <span class="count">0</span>
+      <a href="{% url 'show_wishlist' %}">
+        <ion-icon name="heart-outline"></ion-icon>
+        <span class="count">{{wishlist_count}}</span>
+      </a>
     </button>
 
     <button class="action-btn" data-mobile-menu-open-btn>
@@ -259,6 +266,5 @@
     </ul>
 
   </nav>
-  {% endif %}
 
 </header>

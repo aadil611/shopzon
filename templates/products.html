@@ -83,9 +83,9 @@
 
                 <div class="showcase-banner">
 
-                  <img src="{{ product.images.url }}" alt="Mens Winter Leathers Jackets" width="300" class="product-img default">
+                  <img src="{{ product.images.url }}" alt="{{product.name}}" width="300" class="product-img default">
                   <a href="{% url 'product_details' product.slug %}">
-                  <img src="{{ product.images.url }}" alt="Mens Winter Leathers Jackets" width="300" class="product-img hover">
+                  <img src="{{ product.images.url }}" alt="{{product.name}}" width="300" class="product-img hover">
                   </a>
 
                   <p class="showcase-badge">15%</p>
@@ -105,7 +105,7 @@
                     </button>
 
                     <button class="btn-action">
-                      <ion-icon name="bag-add-outline"></ion-icon>
+                      <a href="{% url 'add_cart' product.id %}"><ion-icon name="bag-add-outline"></ion-icon></a>
                     </button>
 
                   </div>
