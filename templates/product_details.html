@@ -41,13 +41,27 @@
                 <p class = "product-description">{{product.description}}</p>
                 {% if in_stock %}
                   <div class = "btn-groups">
-                    <a href="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart"></i> add to cart</a>
-                   <button type = "button" class = "buy-now-btn btn"> <a href="#" style="color:white;"><i class = "fas fa-wallet"></i>buy now </a></button>
+                    {% if not in_cart %}
+                      <a href="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart"></i> add to cart</a>
+                    {% else %}
+                      <span class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Added to Cart </span>
+                    {% endif %}
+                      <a href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </a>
+                    {% if not in_wishlist %}
+                      <a href="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</a>
+                    {% else %}
+                      <span class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</span>
+                    {% endif %}
                   </div>
                 {% else %}
                   <div class = "btn-groups">
                     <h2 style="color:red;"> Out Of Stock </h2><br>
-                    <button type = "button" class = "buy-now-btn" title="We will notify once item in stock"><i class = "fas fa-bell"></i>Notify</button>
+                    <a class = "buy-now-btn btn" title="We will notify once item in stock"><i class = "fas fa-bell"></i> Notify</a>
+                    {% if not in_wishlist %}
+                      <a href="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</a>
+                    {% else %}
+                      <span class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</span>
+                    {% endif %}
                   </div>
                 {% endif %}
             </div>

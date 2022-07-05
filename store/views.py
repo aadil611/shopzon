@@ -1,5 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from .models import Product
+from carts.models import Cart,CartItem,WishList
+from carts.views import _cart_id
 from category.models import Category,SubCategory
 from random import choice,randint
 from django.core import serializers
@@ -60,8 +62,17 @@ def search(request):
 def product_details(request,slug):
   product = get_object_or_404(Product, slug=slug)
   in_stock = True if product.stock >= 1 else False
+  try:
+    cart = Cart.objects.get(cart_id = _cart_id(request))
+  except Cart.DoesNotExist:
+    cart = Cart.objects.create(cart_id = _cart_id(request))
+
+  in_wishlist = True if WishList.objects.filter(cart=cart,product=product).exists() else False
+  in_cart     = True if CartItem.objects.filter(cart=cart,product=product).exists() else False
   context = {
     'product':product,
     'in_stock':in_stock,
+    'in_wishlist':in_wishlist,
+    'in_cart':in_cart,
   }
   return render(request,'product_details.html',context)

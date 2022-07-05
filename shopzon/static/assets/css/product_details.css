@@ -140,13 +140,11 @@ img{
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin:3px;
 }
-.btn-groups button .fas{
-    margin-right: 8px;
-}
+
 .add-cart-btn{
     background-color: var(--bittersweet);
-    margin-right: 8px;
     border-radius: var(--border-radius-sm);
 }
 .add-cart-btn:hover{
@@ -162,6 +160,8 @@ img{
     background-color: green;
     /* color: #000; */
 }
+
+
 
 @media screen and (max-width: 992px){
     .product-div{
@@ -188,8 +188,16 @@ img{
 }
 
 @media screen and (max-width: 400px){
-    .btn-groups a,button{
-        width: 100%;
-        margin-bottom: 10px;
+
+    .btn-groups .btn{
+        width: 70%;
+        /* display:flex;
+        align-items: center; */
+        /* margin-bottom: 10px; */
+    }
+
+    .btn-groups .fas{
+        margin:3px;
+        padding:5px auto;
     }
 }

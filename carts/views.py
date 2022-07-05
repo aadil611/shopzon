@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect , get_object_or_404
 from store.models import Product
 from .models import Cart,CartItem ,WishList
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 def _cart_id(request):
@@ -57,7 +59,7 @@ def add_cart(request,product_id):
     )
     cart_item.save()
   
-  return redirect('cart')
+  return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
 def cart(request):
@@ -101,8 +103,8 @@ def add_wishlist(request,product_id):
     wishlist = WishList.objects.get(cart=cart, product=product)
   except:
     wishlist = WishList.objects.create(product=product,cart=cart)
-
-  return redirect('cart')
+  
+  return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 def show_wishlist(request):
   cart = Cart.objects.get(cart_id = _cart_id(request))
@@ -111,6 +113,7 @@ def show_wishlist(request):
     'wishlist': wishlist,
     'empty'   : not wishlist.exists(),
     }
+  
   return render(request, 'wishlist.html', context)
 
 

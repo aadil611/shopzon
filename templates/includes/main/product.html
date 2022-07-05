@@ -880,10 +880,12 @@
 
                 <p class="showcase-badge">15%</p>
 
-                <div class="showcase-actions">
+                {% comment %} <div class="showcase-actions">
 
                   <button class="btn-action">
+                    <a href="{% url 'wishlist' product.id %}">
                     <ion-icon name="heart-outline"></ion-icon>
+                    </a>
                   </button>
 
                   <button class="btn-action">
@@ -898,7 +900,7 @@
                     <a href="{% url 'add_cart' product.id %}"><ion-icon name="bag-add-outline"></ion-icon></a>
                   </button>
 
-                </div>
+                </div> {% endcomment %}
 
               </div>
 
