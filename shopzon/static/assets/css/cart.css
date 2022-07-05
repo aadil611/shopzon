@@ -126,7 +126,16 @@ th:first-child{
 }
 
 .empty-msg {
-  color:var(--bittersweet);
+  color:var(--eerie-black);
+}
+
+.empty-cart a{
+  background:var(--bittersweet);
+  display: inline-block;
+  padding:5px 15px;
+  border-radius: var(--border-radius-sm);
+  margin-bottom:5px;
+  color:white;
 }
 
 

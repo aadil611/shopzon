@@ -9,9 +9,9 @@
 {% block content %}
 
   {% if empty %}
-    <div style="text-align:center;">
+    <div style="text-align:center;" class="empty-cart">
       <h2 class="empty-msg">Your Cart is Empty </h2>
-      <a href="{% url 'home' %}"> go to home page </a>
+      <a href="{% url 'home' %}"> Continue Shopping </a>
     </div>
   {% else %}
     <div class="small-container cart-page">
