@@ -89,19 +89,22 @@
                   </a>
 
                   <p class="showcase-badge">15%</p>
-
+                  {% if product.stock < 1 %}
+                    <small class="showcase-content" style="color:red"> Out of stock </small>
+                  {% endif %}
                   <div class="showcase-actions">
+                    {% if product.stock >= 1 %}
+                      <button class="btn-action">
+                        <a href="{% url 'wishlist' product.id %}">
+                        <ion-icon name="heart-outline"></ion-icon>
+                        </a>
+                      </button>
+                      
 
-                    <button class="btn-action">
-                      <a href="{% url 'wishlist' product.id %}">
-                      <ion-icon name="heart-outline"></ion-icon>
-                      </a>
-                    </button>
-
-                    <button class="btn-action">
-                      <a href="{% url 'add_cart' product.id %}"><ion-icon name="bag-add-outline"></ion-icon></a>
-                    </button>
-
+                      <button class="btn-action">
+                        <a href="{% url 'add_cart' product.id %}"><ion-icon name="bag-add-outline"></ion-icon></a>
+                      </button>
+                    {% endif %}
                   </div>
 
                 </div>
@@ -132,9 +135,26 @@
               </div>
 
             {% endfor %}
-
+            
           </div>
-
+          {% if products.has_other_pages %}
+            <div class="pagination" >
+              {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}"> Prev </a>
+              {% endif %}
+              {% for i in products.paginator.page_range %}
+                {% if products.number == i %}
+                  <a href="?page={{ i }}" class="active"> {{i}} </a>
+                {% else %}
+                  <a href="?page={{ i }}"> {{i}} </a>
+                {% endif %}
+              {% endfor %}
+              {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}"> Next </a>
+              {% endif %}
+            </div>
+          {% endif %}
+          
         </div>
 
       </div>

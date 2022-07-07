@@ -2635,6 +2635,43 @@ footer {
 
 }
 
+/**   pagination */
+
+.pagination {
+  margin-top:10px;
+  display:flex;
+  justify-content: flex-start;
+  flex-wrap:wrap;
+}
+
+.pagination a {
+  background: var(--ocean-green);
+  padding:5px 15px;
+  margin:5px;
+  border-radius:var(--border-radius-md);
+  cursor: pointer;
+  display:block;
+}
+
+.pagination a{
+  color:inherit;
+}
+
+.pagination .active {
+  background:var(--bittersweet) !important;
+  color:white !important;
+}
+
+.pagination a:hover  { 
+  color:white;
+  background:var(--bittersweet);
+}
+
+@media  (max-width:400){
+  .pagination {
+    width:350px;
+  }
+}
 
 
 

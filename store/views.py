@@ -6,6 +6,7 @@ from category.models import Category,SubCategory
 from random import choice,randint
 from django.core import serializers
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 import json
 
 # Create your views here
@@ -18,8 +19,11 @@ def products(request,category_slug):
     subcategory = get_object_or_404(SubCategory,slug=category_slug)
     products = Product.objects.filter(sub_category=subcategory)
   products_count = products.count()
+  paginator = Paginator(products,8)
+  page = request.GET.get('page')
+  paged_products = paginator.get_page(page)
   context = {
-    'products': products,
+    'products': paged_products,
     'products_count': products_count
   }
   return render(request,'products.html',context)
@@ -39,7 +43,7 @@ def get_notification(request):
 
 def search(request):
   if request.method == 'GET':
-    keyword = request.GET.get('search')
+    keyword = request.GET.get('search','')
     try:
       category = Category.objects.get(slug=keyword)
       products = Product.objects.filter(category=category)
@@ -51,8 +55,11 @@ def search(request):
         products = Product.objects.filter(name__contains=keyword)
 
     products_count = products.count()
+    paginator = Paginator(products,8)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
     context = {
-      'products':products,
+      'products':paged_products,
       'products_count':products_count
     }
 
