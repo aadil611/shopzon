@@ -159,6 +159,23 @@ img{
     background-color: green;
 }
 
+.product-variation { 
+    margin:10px;
+    display: inline-block;
+}
+
+.product-variation select { 
+    /* background:var(--salmon-pink); */
+    border-radius: 5px;
+    padding:5px;
+    /* color:white; */
+}
+
+.product-variation select option {
+    position:relative;
+    left:10px;
+}
+
 
 
 @media screen and (max-width: 992px){

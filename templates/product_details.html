@@ -39,31 +39,58 @@
                     <span>(350 ratings)</span>
                 </div>
                 <p class = "product-description">{{product.description}}</p>
-                {% if in_stock %}
-                  <div class = "btn-groups">
-                    {% if not in_cart %}
-                      <a href="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart"></i> add to cart</a>
-                    {% else %}
-                      <span class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Added to Cart </span>
-                    {% endif %}
-                      <a href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </a>
-                    {% if not in_wishlist %}
-                      <a href="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</a>
-                    {% else %}
-                      <span class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</span>
-                    {% endif %}
-                  </div>
-                {% else %}
-                  <div class = "btn-groups">
-                    <h2 style="color:red;"> Out Of Stock </h2><br>
-                    <a class = "buy-now-btn btn" title="We will notify once item in stock"><i class = "fas fa-bell"></i> Notify</a>
-                    {% if not in_wishlist %}
-                      <a href="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</a>
-                    {% else %}
-                      <span class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</span>
-                    {% endif %}
-                  </div>
-                {% endif %}
+
+                <form method="POST">
+                  {% csrf_token %}
+                  {% if product.variation_set.color %}
+                    <div class="product-variation">
+                      <select  name="color" class="select-variation">
+                        <option value="">--Select Color--</option>
+                      {% for variation in product.variation_set.color %}
+                          <option value="{{variation.variation_value}}">{{variation.variation_value}}</option>
+                      {% endfor %}
+                      </select>
+                    </div>
+                  {% endif %}
+
+                  {% if product.variation_set.size %}
+                    <div class="product-variation">
+                      <select  class="select-variation" name="size">
+                        <option value="">--Select Size--</option>
+                      {% for variation in product.variation_set.size %}
+                          <option value="{{variation.variation_value}}">{{variation.variation_value}}</option>
+                      {% endfor %}
+                      </select>
+                    </div>
+
+                    {{product.id | json_script:'product_id'}}
+                  {% endif %}
+
+                  {% if in_stock %}
+                    <div class = "btn-groups">
+                      
+                      <button type="submit" formaction="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart" id="cart-btn"></i> add to cart</button>
+
+                      <button type="submit" href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </button>
+
+                      {% if not in_wishlist %}
+                        <button formaction="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</button>
+                      {% else %}
+                      <a href={% url 'remove_wishlist' product.id %} class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</a>
+                      {% endif %}
+                    </div>
+                  {% else %}
+                    <div class = "btn-groups">
+                      <h2 style="color:red;"> Out Of Stock </h2><br>
+                      <button type="submit" class = "buy-now-btn btn" title="We will notify once item in stock"><i class = "fas fa-bell"></i> Notify</button>
+                      {% if not in_wishlist %}
+                        <button type="submit" formaction="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</button>
+                      {% else %}
+                        <a href={% url 'remove_wishlist' product.id %} class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</a>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </form>
             </div>
         </div>
     </div>

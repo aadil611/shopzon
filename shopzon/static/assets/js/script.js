@@ -156,6 +156,7 @@ if( window.location.pathname === '/') {
 /**************Product details page functions ************** */
 
 if( window.location.pathname.indexOf('/product_details/') >= 0 ) {
+
   const allHoverImages = document.querySelectorAll('.hover-container div img');
   const imgContainer = document.querySelector('.img-container');
 
@@ -176,4 +177,35 @@ if( window.location.pathname.indexOf('/product_details/') >= 0 ) {
           img.parentElement.classList.remove('active');
       });
   }
+
+
+
+  // var incart = function (fetchedvariation) {
+  //   var res = true;
+  //   var selectVariation = document.getElementsByClassName('select-variation');  
+  //   if(selectVariation.length != fetchedvariation.length){
+  //     res = false;
+  //   }
+      
+  //   var index = 0
+  //   Array.from(selectVariation).forEach( (variation) => {
+  //     if(variation.value === fetchedvariation[index++]){
+  //     }
+  //     else{
+  //       res = false;
+  //     }
+  //   })
+  //   return res;
+  // }
+
+  // var selectHandler = function (){
+  //   var cart_variation_url = 'http://127.0.0.1:8000/get_cart_variations/' + product_id.textContent
+  //   fetch(cart_variation_url).then( (response) => {
+  //     response.json().then( data => {
+  //       if(incart(data.variations)){
+          
+  //       }
+  //       })
+  //     });
+  // }
 }

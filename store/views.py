@@ -76,10 +76,36 @@ def product_details(request,slug):
 
   in_wishlist = True if WishList.objects.filter(cart=cart,product=product).exists() else False
   in_cart     = True if CartItem.objects.filter(cart=cart,product=product).exists() else False
+  cart_items = CartItem.objects.filter(cart=cart,product=product)
+
+  variations =[]
+  for cart_item in cart_items:
+    for variation in cart_item.variation.all():
+      variations.append(variation)
+  
   context = {
     'product':product,
     'in_stock':in_stock,
     'in_wishlist':in_wishlist,
     'in_cart':in_cart,
+    'variations':variations,
   }
   return render(request,'product_details.html',context)
+
+
+def get_cart_variations(request,product_id):
+  product = Product.objects.get(id=product_id)
+  cart_items = []
+  variations = []
+  try:
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    cart_items = CartItem.objects.filter(cart=cart,product=product)
+
+    for cart_item in cart_items:
+      for variation in cart_item.variation.all():
+        variations.append(variation.variation_value)
+        print(variation.variation_value)
+  except:
+    pass
+  print(variations)
+  return HttpResponse(json.dumps({'variations':variations}),content_type='application/json')
