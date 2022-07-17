@@ -90,7 +90,7 @@ if( window.location.pathname === '/') {
 
 
 
-  var notification_url    = "http://127.0.0.1:8000/get_notification/"
+  var notification_url    = "http://127.0.0.1:8000/store/get_notification/"
   var toastTitle          = document.getElementById('not_name');
   var toastImg            = document.getElementById('not_img');
   var toastTime           = document.getElementById('not_time');
@@ -104,8 +104,6 @@ if( window.location.pathname === '/') {
         toastTitle.textContent = data.name;
         toastImg.setAttribute('src',data.url);
         toastTime.children[0].textContent = data.time + " Minutes";
-        console.log(toastImgHref.href,toastNameHref.href);
-        console.log(host);
         toastImgHref.href = data.href;
         toastNameHref.href = data.href;
       })
@@ -178,34 +176,131 @@ if( window.location.pathname.indexOf('/product_details/') >= 0 ) {
       });
   }
 
+  const handleWishlist = function(){
+    var colorelem = document.getElementById('select-color');
+    var sizeelem  = document.getElementById('select-size');
+    colorelem.value = olorelem.options[1].value;
+    sizeelem.value = 'temp';
+  }
 
+/*  var validateSelection = function(event){
+    var colorelem = document.getElementById('select-color');
+    var selectedColor = colorelem.options[colorelem.selectedIndex].value;
+    var sizeelem  = document.getElementById('select-size');
+    var selectedSize = sizeelem.options[sizeelem.selectedIndex].value
 
-  // var incart = function (fetchedvariation) {
-  //   var res = true;
-  //   var selectVariation = document.getElementsByClassName('select-variation');  
-  //   if(selectVariation.length != fetchedvariation.length){
-  //     res = false;
-  //   }
+    console.log(selectedSize,selectedColor,event)
+
+    if(selectedSize == 'defsize') {
+      alert('please select a size');
+
+      return false;
+    }
+
+    else if(selectedColor == 'defcolor') {
+      alert('please select a color');
+      return false;
+    }
+    var addCartUrl = document.getElementById('addCart').formAction;
+    console.log(addCartUrl);
+    window.location.href = addCartUrl
+  }
+
+  var incart = function (fetchedvariation) {
+    var res = true;
+    var selectVariation = document.getElementsByClassName('select-variation');  
+    if(selectVariation.length != fetchedvariation.length){
+      res = false;
+    }
       
-  //   var index = 0
-  //   Array.from(selectVariation).forEach( (variation) => {
-  //     if(variation.value === fetchedvariation[index++]){
-  //     }
-  //     else{
-  //       res = false;
-  //     }
-  //   })
-  //   return res;
-  // }
+    var index = 0
+    Array.from(selectVariation).forEach( (variation) => {
+      if(variation.value === fetchedvariation[index++]){
+      }
+      else{
+        res = false;
+      }
+    })
+    return res;
+  }
 
-  // var selectHandler = function (){
-  //   var cart_variation_url = 'http://127.0.0.1:8000/get_cart_variations/' + product_id.textContent
-  //   fetch(cart_variation_url).then( (response) => {
-  //     response.json().then( data => {
-  //       if(incart(data.variations)){
+  var selectHandler = function (){
+    var cart_variation_url = 'http://127.0.0.1:8000/get_cart_variations/' + product_id.textContent
+    fetch(cart_variation_url).then( (response) => {
+      response.json().then( data => {
+        if(incart(data.variations)){
           
-  //       }
-  //       })
-  //     });
-  // }
+        }
+        })
+      });
+  } */
 }
+
+if(window.location.href.indexOf('register/')>=0 || window.location.href.indexOf('reset_password/')>=0){
+  const container = document.querySelector(".rcontainer"),
+      pwShowHide = document.querySelectorAll(".showHidePw"),
+      pwFields = document.querySelectorAll(".password"),
+      signUp = document.querySelector(".signup-link"),
+      login = document.querySelector(".login-link");
+
+    //   js code to show/hide password and change icon
+    pwShowHide.forEach(eyeIcon =>{
+        eyeIcon.addEventListener("click", ()=>{
+            pwFields.forEach(pwField =>{
+                if(pwField.type ==="password"){
+                    pwField.type = "text";
+
+                    pwShowHide.forEach(icon =>{
+                        icon.classList.replace("uil-eye-slash", "uil-eye");
+                    })
+                }else{
+                    pwField.type = "password";
+
+                    pwShowHide.forEach(icon =>{
+                        icon.classList.replace("uil-eye", "uil-eye-slash");
+                    })
+                }
+            }) 
+        })
+    })
+
+    // js code to appear signup and login form
+    // signUp.addEventListener("click", ( )=>{
+    //     container.classList.add("active");
+    // });
+    // login.addEventListener("click", ( )=>{
+    //     container.classList.remove("active");
+    // });
+
+
+}
+
+const alert_toast = document.getElementById("alert-toast"),
+      closeIcon = document.getElementById("alert-close"),
+      alert_progress = document.getElementById("alert-progress");
+
+      let timer1, timer2;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        alert_toast.classList.add("active");
+        alert_progress.classList.add("active");
+
+        timer1 = setTimeout(() => {
+            alert_toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+
+        timer2 = setTimeout(() => {
+          alert_progress.classList.remove("active");
+        }, 5300);
+      });
+      
+      closeIcon.addEventListener("click", () => {
+        alert_toast.classList.remove("active");
+        
+        setTimeout(() => {
+          alert_progress.classList.remove("active");
+        }, 300);
+
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });

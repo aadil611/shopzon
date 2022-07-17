@@ -46,8 +46,6 @@ def add_cart(request,product_id):
         variation_list.append(variation)
       except:
         pass
-    print('request variation =>',variation_list)
-
 
   try:
     cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -59,7 +57,6 @@ def add_cart(request,product_id):
 
   cart_item_exists = cart_items.exists
   if cart_item_exists:
-
     existing_variation_list = []
     ids = []
     for item in cart_items:
@@ -111,7 +108,7 @@ def cart(request):
     context = {
       'empty':True
     }
-  return render(request,'cart.html',context)
+  return render(request,'carts/cart.html',context)
 
 
 def add_wishlist(request,product_id):
@@ -133,7 +130,7 @@ def show_wishlist(request):
     'empty'   : not wishlist.exists(),
     }
   
-  return render(request, 'wishlist.html', context)
+  return render(request, 'carts/wishlist.html', context)
 
 
 def remove_wishlist(request,product_id):

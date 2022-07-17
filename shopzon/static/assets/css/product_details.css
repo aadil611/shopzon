@@ -177,7 +177,6 @@ img{
 }
 
 
-
 @media screen and (max-width: 992px){
     .product-div{
         grid-template-columns: 100%;

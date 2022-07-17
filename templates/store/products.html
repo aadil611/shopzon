@@ -140,17 +140,17 @@
           {% if products.has_other_pages %}
             <div class="pagination" >
               {% if products.has_previous %}
-                <a href="?page={{ products.previous_page_number }}"> Prev </a>
+                <a href="?page={{ products.previous_page_number }}{% if keyword %} &search={{keyword}} {% endif %}"> Prev </a>
               {% endif %}
               {% for i in products.paginator.page_range %}
                 {% if products.number == i %}
-                  <a href="?page={{ i }}" class="active"> {{i}} </a>
+                  <a href="?page={{ i }}{% if keyword %} &search={{keyword}} {% endif %}" class="active"> {{i}} </a>
                 {% else %}
-                  <a href="?page={{ i }}"> {{i}} </a>
+                  <a href="?page={{ i }}{% if keyword %} &search={{keyword}} {% endif %}"> {{i}} </a>
                 {% endif %}
               {% endfor %}
               {% if products.has_next %}
-                <a href="?page={{ products.next_page_number }}"> Next </a>
+                <a href="?page={{ products.next_page_number }}{% if keyword %} &search={{keyword}} {% endif %}"> Next </a>
               {% endif %}
             </div>
           {% endif %}

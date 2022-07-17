@@ -2647,7 +2647,7 @@ footer {
 .pagination a {
   background: var(--ocean-green);
   padding:5px 15px;
-  margin:5px;
+  margin:1px;
   border-radius:var(--border-radius-md);
   cursor: pointer;
   display:block;
@@ -2674,7 +2674,153 @@ footer {
 }
 
 
+/*********** Alert Notification **************/
 
+.alert-div {
+  height: 0vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2; 
+  overflow: hidden;
+}
+
+#alert-toast{
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px 35px 20px 25px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transform: translateX(calc(100% + 30px));
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+}
+
+#alert-toast.active{
+  transform: translateX(0%);
+}
+
+#alert-toast .alert-toast-content{
+  display: flex;
+  align-items: center;
+}
+
+#alert-toast-content .check{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  width: 35px;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 50%;
+}
+
+#alert-toast-content .message{
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+}
+
+.message .text{
+  font-size: 20px;
+  font-weight: 400;;
+  color: #666666;
+}
+
+.message .text.text-1{
+  font-weight: 600;
+  color: #333;
+}
+
+#alert-toast #alert-close{
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  padding: 5px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+#alert-toast #alert-close:hover{
+  opacity: 1;
+}
+
+#alert-toast #alert-progress{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: #ddd;
+}
+
+#alert-toast #alert-progress:before{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#alert-progress.active:before{
+  animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+  100%{
+      right: 100%;
+  }
+}
+
+.alert-div button{
+  padding: 12px 20px;
+  font-size: 20px;
+  outline: none;
+  border: none;
+  background-color: #4070f4;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.alert-div button:hover{
+  background-color: #0e4bf1;
+}
+
+#alert-toast.active ~ button{
+  pointer-events: none;
+}
+
+.error-border {
+  border-left: 6px solid var(--bittersweet);
+}
+
+.success-border {
+  border-left: 6px solid green;
+}
+
+.error-progress:before { 
+  background-color: var(--bittersweet);
+}
+
+.success-progress:before { 
+  background-color:green;
+}
+
+.error-icon {
+  background-color: var(--bittersweet);
+}
+
+.success-icon {
+  background-color: green;
+}
+
+/************ Alert End ***************/
 
 /**
  * responsive larger than 1400px screen

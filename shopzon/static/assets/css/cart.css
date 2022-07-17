@@ -172,4 +172,8 @@ th:first-child{
   .cart-page{
     margin:10px !important;
   }
+
+  .cart-quantity{
+    flex-direction: column;
+  }
 }

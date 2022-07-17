@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrahead %}
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  <link rel="stylesheet" href="{% static 'assets/css/register.css' %}" >
+{% endblock %}
+
+{% block content %}
+    
+  <div class="ocontainer">
+    {% if request.GET.command == 'verification' %}
+      <div style="margin-top:0;height:50%;width:60%;">
+        <p style="text-align:center;color:green;"> Your account is created successfully. We have send you a confirmation email on [{{request.GET.email}}] to verify your account 
+          <br><br><br>
+          already verified ?  <a style="display:inline;" href={% url 'login' %}> login </a> here.
+        </p>
+      </div>
+    {% else %}
+      <div class="rcontainer {% if request.path == '/accounts/register/' %} active{% endif %}">
+        <div class="forms">
+            <div class="form login">
+                <span class="title">Login</span>
+
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="input-field">
+                        <input type="text" placeholder="Enter your email" name="username" required>
+                        <i class="uil uil-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="password" placeholder="Enter your password" name="password" required>
+                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="logCheck">
+                            <label for="logCheck" class="text">Remember me</label>
+                        </div>
+                        
+                        <a href="{% url 'forgot_password' %}" class="text">Forgot password?</a>
+                    </div>
+
+                    <div class="input-field button">
+                        <input type="submit" value="Login">
+                    </div>
+                </form>
+
+                <div class="login-signup">
+                    <span class="text">Not a member?
+                        <a href="{% url 'register' %}" class="text signup-link">Signup Now</a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="form signup">
+                <span class="title">Registration</span>
+
+                <form action="{% url 'register' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="input-field">
+                        <input type="text" placeholder="Enter your first name" name="first_name" required/>
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" placeholder="Enter your last name" name="last_name" required>
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="email" placeholder="Enter your email" name="email" required>
+                        <i class="uil uil-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="tel" placeholder="Enter your phone number" name="phone_number" required/>
+                        <i class="uil uil-phone icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="password" placeholder="Create a password" name="password" required>
+                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" class="password" placeholder="Confirm your password" name="confirm_password" required>
+                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="termCon" required>
+                            <label for="termCon" class="text">I accepted all terms and conditions</label>
+                        </div>
+                    </div>
+
+                    <div class="input-field button">
+                        <input type="submit" value="Signup">
+                    </div>
+                </form>
+                <div class="login-signup">
+                    <span class="text">Already a member?
+                        <a href="{% url 'login' %}" class="text login-link">Login Now</a>
+                    </span>
+                </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+{% include 'includes/alerts.html' %}
+{% endblock %}

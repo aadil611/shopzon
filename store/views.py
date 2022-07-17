@@ -26,7 +26,7 @@ def products(request,category_slug):
     'products': paged_products,
     'products_count': products_count
   }
-  return render(request,'products.html',context)
+  return render(request,'store/products.html',context)
 
 
 
@@ -36,7 +36,7 @@ def get_notification(request):
     'name': product.name,
     'url' : product.images.url,
     'time': randint(1, 10),
-    'href': '/product_details/' + product.slug,
+    'href': '/store/product_details/' + product.slug,
   }
   return HttpResponse(json.dumps(product))
 
@@ -60,10 +60,11 @@ def search(request):
     paged_products = paginator.get_page(page)
     context = {
       'products':paged_products,
-      'products_count':products_count
+      'products_count':products_count,
+      'keyword':keyword if len(keyword) > 0 else None
     }
 
-  return render(request,'products.html',context)
+  return render(request,'store/products.html',context)
 
 
 def product_details(request,slug):
@@ -90,7 +91,7 @@ def product_details(request,slug):
     'in_cart':in_cart,
     'variations':variations,
   }
-  return render(request,'product_details.html',context)
+  return render(request,'store/product_details.html',context)
 
 
 def get_cart_variations(request,product_id):

@@ -1,0 +1,22 @@
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert-div">
+      <div id="alert-toast" class="{{message.tags}}-border">
+        <div id="alert-toast-content">
+            {% if message.tags == 'success' %}
+            <ion-icon name="checkmark-done-circle-outline" class="check {{message.tags}}-icon"></ion-icon>
+            {% else %}
+            <ion-icon name="alert-outline" class="check {{message.tags}}-icon"></ion-icon>
+            {% endif %}
+            <div class="alert-message">
+                <span class="text text-1"></span>
+                <span class="text text-2">{{message.message}}</span>
+            </div>
+        </div>
+        <ion-icon name="close-outline" id="alert-close"></ion-icon>
+
+        <div id="alert-progress" class="{{message.tags}}-progress"></div>
+      </div>
+    </div
+  {% endfor %}
+{% endif %}

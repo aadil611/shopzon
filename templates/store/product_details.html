@@ -44,7 +44,7 @@
                   {% csrf_token %}
                   {% if product.variation_set.color %}
                     <div class="product-variation">
-                      <select  name="color" class="select-variation">
+                      <select id="select-color"  name="color" class="select-variation" required>
                         <option value="">--Select Color--</option>
                       {% for variation in product.variation_set.color %}
                           <option value="{{variation.variation_value}}">{{variation.variation_value}}</option>
@@ -55,7 +55,7 @@
 
                   {% if product.variation_set.size %}
                     <div class="product-variation">
-                      <select  class="select-variation" name="size">
+                      <select id="select-size" class="select-variation" name="size" required>
                         <option value="">--Select Size--</option>
                       {% for variation in product.variation_set.size %}
                           <option value="{{variation.variation_value}}">{{variation.variation_value}}</option>
@@ -69,12 +69,12 @@
                   {% if in_stock %}
                     <div class = "btn-groups">
                       
-                      <button type="submit" formaction="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart" id="cart-btn"></i> add to cart</button>
+                      <button type="submit" id="addCart"  formaction="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart" id="cart-btn"></i> add to cart</button>
 
-                      <button type="submit" href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </button>
+                      <button type="submit"  href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </button>
 
                       {% if not in_wishlist %}
-                        <button formaction="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</button>
+                        <a href="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</a>
                       {% else %}
                       <a href={% url 'remove_wishlist' product.id %} class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</a>
                       {% endif %}
