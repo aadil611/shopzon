@@ -1,0 +1,175 @@
+{% extends 'base.html'%}
+
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/cart/checkout.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/accounts/register.css' %}">
+{% endblock %}
+
+{% block content %}
+  <!--
+    - main container
+  -->
+<form >
+  <main class="c-container">
+
+    <h1 class="heading">
+      <ion-icon name="arrow-redo-outline"></ion-icon>  Checkout
+    </h1>
+
+    <div class="item-flex">
+
+      <!--
+      - checkout section
+      -->
+      <section class="checkout">
+
+        <div class="payment-form">
+
+          <div class="ocontainer">
+              <div class="rcontainer active">
+                <div class="forms">
+        
+                    <!-- Billing adress Form -->
+                    <div class="form signup">
+                        <span class="title">Billing Adress</span>
+        
+                        
+                            {% csrf_token %}
+                            <div class="input-field">
+                                <input type="text" placeholder="Full name" name="full_name" required/>
+                                <i class="uil uil-user"></i>
+                            </div>
+                            <div class="input-field">
+                                <input type="email" placeholder="Enter your email" name="email" required>
+                                <i class="uil uil-envelope icon"></i>
+                            </div>
+                            <div class="input-field">
+                                <input type="tel" placeholder="your phone number" name="phone_number" required/>
+                                <i class="uil uil-phone icon"></i>
+                            </div>
+                            <div class="input-field">
+                              <input type="tel" placeholder="Delivery Address " name="address" required/>
+                              <i class="uil uil-phone icon"></i>
+                            </div>
+                            <div class="input-field">
+                              <input type="tel" placeholder="country Name" name="phone_number" required/>
+                              <i class="uil uil-phone icon"></i>
+                            </div>
+                            <div class="input-field">
+                              <input type="tel" placeholder="State Name" name="phone_number" required/>
+                              <i class="uil uil-phone icon"></i>
+                            </div>
+                            <div class="input-field">
+                              <input type="tel" placeholder="Zip Code" name="phone_number" required/>
+                              <i class="uil uil-phone icon"></i>
+                            </div>
+                        
+                  </div>
+                </div>
+              </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!--
+        - cart section
+      -->
+      <section class="c-cart">
+
+        <div class="c-cart-item-box">
+
+          <h2 class="section-heading">Order Summury</h2>
+
+          {% for cart_item in cart_items %}
+            <div class="product-card">
+
+              <div class="card">
+
+                <div class="img-box">
+                  <img src="{{cart_item.product.images.url}}" alt="{{cart_item.product.name}}"  height="80px" class="product-img">
+                </div>
+
+                <div class="detail">
+
+                  <h4 class="product-name">{{cart_item.product.name}}</h4>
+
+                  <div class="wrapper">
+
+                    <div class="product-qty">
+                      <span id="quantity">Qty : {{cart_item.quantity}}</span>
+                    </div>
+
+                    <div class="price">
+                      &#8377; <span id="price">{{cart_item.product.price}}</span>
+                    </div>
+
+                    {% for variation in cart_item.variation.all %}
+                      <div class="product-qty">
+                        <span id="quantity">{{variation.variation_category}}:{{variation.variation_value}}</span>
+                      </div>
+                      
+                    {% endfor %}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          {% endfor %}
+
+        </div>
+
+        <div class="wrapper">
+
+          <div class="discount-token">
+
+            <label for="discount-token" class="label-default">Gift card/Discount code</label>
+
+            <div class="wrapper-flex">
+
+              <input type="text" name="discount-token" id="discount-token" class="input-default">
+
+              <button class="btn btn-outline">Apply</button>
+
+            </div>
+
+          </div>
+
+          <div class="amount">
+
+            <div class="subtotal">
+              <span>Subtotal</span> <span>&#8377; <span id="subtotal">{{subtotal}}</span></span>
+            </div>
+
+            <div class="tax">
+              <span>Tax</span> <span>&#8377; <span id="tax">{{tax}}</span></span>
+            </div>
+
+            <div class="shipping">
+              <span>Shipping</span> <span>&#8377; <span id="shipping">0.00</span></span>
+            </div>
+
+            <div class="total">
+              <span>Total</span> <span>&#8377; <span id="total">{{ subtotal | add:tax }}</span></span>
+            </div>
+
+          </div>
+
+          <button type="submit" id="place-order" class="btn btn-primary"> Place Order </button>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+</form>
+{% endblock %}

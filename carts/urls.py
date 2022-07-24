@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import cart , add_cart , minus_cart , remove_cart , add_wishlist , show_wishlist , remove_wishlist
+from .views import cart , add_cart , minus_cart , remove_cart , add_wishlist , show_wishlist , remove_wishlist,checkout
 
 urlpatterns = [
   path('cart/',cart,name='cart'),
@@ -9,4 +9,5 @@ urlpatterns = [
   path('wishlist/<int:product_id>/',add_wishlist,name='wishlist'),
   path('show_wishlist/',show_wishlist,name='show_wishlist'),
   path('remove_wishlist/<int:product_id>/',remove_wishlist,name='remove_wishlist'),
+  path('checkout/',checkout,name='checkout'),
 ]

@@ -3,6 +3,7 @@ from store.models import Product,Variation
 from .models import Cart,CartItem ,WishList
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def _cart_id(request):
@@ -15,7 +16,10 @@ def _cart_id(request):
 def remove_cart(request,product_id,cart_item_id):
   product   = get_object_or_404(Product,id=product_id)
   cart      = get_object_or_404(Cart,cart_id = _cart_id(request))
-  cart_item = get_object_or_404(CartItem,product=product,cart=cart,id=cart_item_id)
+  if request.user.is_authenticated:
+    cart_item = get_object_or_404(CartItem,product=product,user=request.user,id=cart_item_id)
+  else:
+    cart_item = get_object_or_404(CartItem,product=product,cart=cart,id=cart_item_id)
   cart_item.delete() 
   return redirect('cart')
 
@@ -25,7 +29,10 @@ def minus_cart(request,product_id,cart_item_id):
   cart      = get_object_or_404(Cart,cart_id = _cart_id(request))
   
   try:
-    cart_item = CartItem.objects.get(product=product,cart=cart,id=cart_item_id)
+    if request.user.is_authenticated:
+      cart_item = CartItem.objects.get(product=product,user=request.user,id=cart_item_id)
+    else:
+      cart_item = CartItem.objects.get(product=product,cart=cart,id=cart_item_id)
     if cart_item.quantity > 1:
       cart_item.quantity -= 1 
       cart_item.save()
@@ -53,7 +60,10 @@ def add_cart(request,product_id):
     cart = Cart.objects.create(cart_id=_cart_id(request))
     cart.save()
 
-  cart_items = CartItem.objects.filter(product=product,cart=cart)
+  if request.user.is_authenticated:
+    cart_items = CartItem.objects.filter(product=product,user=request.user)
+  else:
+    cart_items = CartItem.objects.filter(product=product,cart=cart)
 
   cart_item_exists = cart_items.exists
   if cart_item_exists:
@@ -86,12 +96,11 @@ def add_cart(request,product_id):
 
 def cart(request):
   try:
-    cart = Cart.objects.get(cart_id = _cart_id(request))
-  except:
-    cart = None
-  # print('cart :=>',cart)
-  if cart is not None:
-    cart_items = CartItem.objects.filter(cart=cart)
+    if request.user.is_authenticated:
+      cart_items = CartItem.objects.filter(user=request.user)
+    else:
+      cart = Cart.objects.get(cart_id = _cart_id(request))
+      cart_items = CartItem.objects.filter(cart=cart)
 
     subtotal = 0 
     for cart_item in cart_items:
@@ -104,10 +113,13 @@ def cart(request):
       'subtotal'      : subtotal,
       'tax'           : tax
     }
-  else:
+  except:
     context = {
       'empty':True
     }
+
+    
+    
   return render(request,'carts/cart.html',context)
 
 
@@ -139,3 +151,23 @@ def remove_wishlist(request,product_id):
   wishlist = get_object_or_404(WishList,product=product,cart=cart)
   wishlist.delete()
   return redirect(request.META.get('HTTP_REFERER','show_wishlist'))
+
+
+@login_required(login_url='login')
+def checkout(request):
+  if request.user.is_authenticated:
+    cart_items = CartItem.objects.filter(user=request.user)
+  else:
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+    cart_items = CartItem.objects.filter(cart=cart)
+  subtotal = 0 
+  for cart_item in cart_items:
+    subtotal += (cart_item.quantity * cart_item.product.price)
+  tax = (subtotal * 18) // 100
+
+  context = {
+    'cart_items': cart_items,
+    'subtotal': subtotal,
+    'tax': tax,
+  }
+  return render(request,'carts/checkout.html',context)

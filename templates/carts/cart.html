@@ -3,7 +3,7 @@
 {% load store_filters %}
 
 {% block extrahead %}
-  <link rel="stylesheet" href="{% static 'assets/css/cart.css' %}" >
+  <link rel="stylesheet" href="{% static 'assets/css/cart/cart.css' %}" >
 {% endblock %}
 
 {% block content %}
@@ -14,80 +14,109 @@
       <a href="{% url 'home' %}"> Continue Shopping </a>
     </div>
   {% else %}
-    <div class="small-container cart-page">
-
-      <table>
-        <col style="width:60%">
-        <col style="width:20%">
-        <col style="width:20%">
-        <tr>
-          <th >Product</th>
-          <th>Quantity</th>
-          <th>Subtotal</th>
-        </tr>
-
-        {% for cart_item in cart_items %}
+    <div class="small-container">
+      <div class=" cart-page">
+        <table>
+          <col style="width:65%">
+          <col style="width:20%">
+          <col style="width:15%">
           <tr>
-            <td>
-              <div class="cart-info">
-                <div class="cart-data">
-                  <a href="{% url 'product_details' cart_item.product.slug %}">
-                  <img src="{{ cart_item.product.images.url }}" alt=""">
-                  </a>
-                  <div class="product-details">
+            <th >Product</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+
+          {% for cart_item in cart_items %}
+            <tr>
+              <td>
+                <div class="cart-info">
+                  <div class="cart-data">
                     <a href="{% url 'product_details' cart_item.product.slug %}">
-                      <p class="product-name">{{cart_item.product.name}}</p>
+                    <img src="{{ cart_item.product.images.url }}" alt=""">
                     </a>
-                    <small class="price">Price: &#8377; {{cart_item.product.price}}</small>
-                    {% for variation in cart_item.variation.all %}
-                      <br><small class="product-variation">{{variation.variation_category}} : {{variation.variation_value}} </small>
-                    {% endfor %}
+                    <div class="product-details">
+                      <a href="{% url 'product_details' cart_item.product.slug %}">
+                        <p class="product-name">{{cart_item.product.name}}</p>
+                      </a>
+                      <small class="price">Price: &#8377; {{cart_item.product.price}}</small>
+                      {% for variation in cart_item.variation.all %}
+                        <br><small class="product-variation">{{variation.variation_category}} : {{variation.variation_value}} </small>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="action-btn">
+                    <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="a-btn"><button>Remove</button></a>
+                    <a href="{% url 'wishlist' cart_item.product.id %}" class="a-btn"> Wishlist </a>
                   </div>
                 </div>
-                <div class="action-btn">
-                  <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="a-btn"><button>Remove</button></a>
-                  <a href="{% url 'wishlist' cart_item.product.id %}" class="a-btn"> Wishlist </a>
-                </div>
-              </div>
-            </td>
+              </td>
 
-            <td class="cart-quantity">
-              <button onclick="window.location.href='{% url 'minus_cart' cart_item.product.id cart_item.id %}'">-<button>
+              <td class="cart-quantity">
+                <button onclick="window.location.href='{% url 'minus_cart' cart_item.product.id cart_item.id %}'">-<button>
 
-              <span>{{cart_item.quantity}}</span>
-              <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
-                {% csrf_token %}
-                {% for variation in cart_item.variation.all %}
-                  <input type="hidden" name="{{variation.variation_category | lower}}" value="{{variation.variation_value | capfirst}}">
-                {% endfor %}
-                <button type="submit">+</button>
-              </form>
+                <span>{{cart_item.quantity}}</span>
+                <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                  {% csrf_token %}
+                  {% for variation in cart_item.variation.all %}
+                    <input type="hidden" name="{{variation.variation_category | lower}}" value="{{variation.variation_value | capfirst}}">
+                  {% endfor %}
+                  <button type="submit">+</button>
+                </form>
 
-            </td>
-            <td>&#8377; {{cart_item.product.price | mul:cart_item.quantity }}</td>
-          </tr>
-        {% endfor %}
-        
-      </table>
-
-      <div class="total-price">
-
-        <table>
-          <tr>
-            <td>Subtotal</td>
-            <td>&#8377; {{subtotal}}</td>
-          </tr>
-          <tr>
-            <td>Tax</td>
-            <td>&#8377; {{tax}}</td>
-          </tr>
-          <tr>
-            <td>Total</td>
-            <td>&#8377; {{subtotal | add:tax }}</td>
-          </tr>
+              </td>
+              <td>&#8377; {{cart_item.product.price | mul:cart_item.quantity }}</td>
+            </tr>
+          {% endfor %}
+          
         </table>
+
+        <div class="total-price">
+
+          <table>
+            <tr>
+              <td>Subtotal</td>
+              <td>&#8377; {{subtotal}}</td>
+            </tr>
+            <tr>
+              <td>Tax</td>
+              <td>&#8377; {{tax}}</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>&#8377; {{subtotal | add:tax }}</td>
+            </tr>
+          </table>
+          
+        </div>
       </div>
 
+
+      <div class="checkout-box">
+        <div class="total-price">
+
+          <table>
+            <tr>
+              <td>Subtotal</td>
+              <td>&#8377; {{subtotal}}</td>
+            </tr>
+            <tr>
+              <td>Tax</td>
+              <td>&#8377; {{tax}}</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>&#8377; {{subtotal | add:tax }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="container">
+
+          <img src="{% static "./assets/images/payment.png" %}" alt="payment method" class="payment-img">
+  
+          <a href="{% url 'checkout' %}" class="btn"> Checkout </a>
+  
+        </div>
+      </div>
     </div>
   {% endif %}
   
