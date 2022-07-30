@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load store_filters %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/cart/cart.css' %}" >
+  <link rel="stylesheet" href="{% static 'assets/css/orders/payment.css' %}" >
+  <script src="https://www.paypal.com/sdk/js?client-id=AbMaOqU9fqM7pImSH3DyCcoYuDeCJO02g2KJAWYhGP3OJ0R5kf-c_Ta_9fuc6E-RWa7a6CyPplK_HRZK&currency=USD"></script>
+{% endblock %}
+
+{% block content %}
+{% include 'orders/order_complete.html' %}
+<h2 style="text-align:center;margin-top:20px"> Review your Orders and make Payment </h2>
+    <div class="payment-details">
+      <div class=" billing-address">
+        <h3 class="title-heading"> Billing Address </h3><br>
+        <span>{{order.first_name}} {{order.last_name}}</span>
+        <span>{{order.email}}</span>
+        <span>{{order.address_line_1}} </span>
+        <span>{{order.state}} ,{{order.city}} , {{order.pincode}}</span>
+        <span>{{order.phone_number}}</span>
+      </div>
+
+      <div class="payment-method">
+        <h3 class="title-heading"> Payment Methods </h3><br>
+        <span> Paypal </span>
+      </div>
+    </div>
+
+    <div class="small-container">
+      
+      <div class=" cart-page">
+        <h3 class="title-heading"> Review Products </h3>
+        <table>
+          <col style="width:80%">
+          <col style="width:5%">
+          <col style="width:15%">
+          <tr>
+            <th >Product</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+
+          {% for cart_item in cart_items %}
+            <tr>
+              <td>
+                <div class="cart-info">
+                  <div class="cart-data">
+                    <a href="{% url 'product_details' cart_item.product.slug %}">
+                    <img src="{{ cart_item.product.images.url }}" alt="">
+                    </a>
+                    <div class="product-details">
+                      <a href="{% url 'product_details' cart_item.product.slug %}">
+                        <p class="product-name">{{cart_item.product.name}}</p>
+                      </a>
+                      <small class="price">Price: &#8377; {{cart_item.product.price}}</small>
+                      {% for variation in cart_item.variation.all %}
+                        <br><small class="product-variation">{{variation.variation_category}} : {{variation.variation_value}} </small>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <td class="cart-quantity">
+                <span>{{cart_item.quantity}}</span>
+              </td>
+              <td>&#8377; {{cart_item.product.price | mul:cart_item.quantity }}</td>
+            </tr>
+          {% endfor %}
+          
+        </table>
+      </div>
+
+
+      <div class="checkout-box">
+        <div class="total-price">
+
+          <table>
+            <tr>
+              <td>Subtotal</td>
+              <td>&#8377; {{subtotal}}</td>
+            </tr>
+            <tr>
+              <td>Tax</td>
+              <td>&#8377; {{tax}}</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>&#8377; {{subtotal | add:tax }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="container">
+
+          <img src="{% static "./assets/images/payment.png" %}" alt="payment method" class="payment-img">
+          <!-- Set up a container element for the button -->
+          <div id="paypal-button-container"></div>
+        </div>
+      </div>
+    </div>
+
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+    var amount = {{ subtotal | add:tax }};
+    var url = "{% url 'payment' %}";
+    var orderID = {{order.order_number}};
+    var payment_method = "paypal";
+    var invoice_url = "{% url 'payment_complete' %}";
+
+
+    paypal.Buttons({
+      // Sets up the transaction when a payment button is clicked
+      createOrder: (data, actions) => {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: amount, 
+            }
+          }]
+        });
+      },
+      // Finalize the transaction after payer approval
+      onApprove: (data, actions) => {
+        return actions.order.capture().then(function(orderData) {
+          sendData();
+          function sendData(){
+            fetch(url,{
+              method : "POST",
+              headers : {
+                "content-type": "application/json",
+                "X-CSRFToken": csrftoken,
+              },
+              body : JSON.stringify({
+                orderID : orderID,
+                transID : orderData.id,
+                payment_method : payment_method,
+                status : orderData.status
+              }),
+            })
+            .then( data => {
+              var popup = document.getElementById("popup");
+              popup.classList.add("open-popup");
+            })
+          }
+        });
+      }
+    }).render('#paypal-button-container');
+
+    function showInvoice(){
+      window.location.href = invoice_url + '?order_id=' + orderID;
+    }
+  </script>
+{% endblock %}

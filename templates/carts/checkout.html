@@ -11,7 +11,7 @@
   <!--
     - main container
   -->
-<form >
+<form action="{% url 'place_order' %}" method="POST">
   <main class="c-container">
 
     <h1 class="heading">
@@ -38,31 +38,39 @@
                         
                             {% csrf_token %}
                             <div class="input-field">
-                                <input type="text" placeholder="Full name" name="full_name" required/>
+                                <input type="text" placeholder="First Name" name="first_name" required/>
                                 <i class="uil uil-user"></i>
                             </div>
                             <div class="input-field">
-                                <input type="email" placeholder="Enter your email" name="email" required>
+                              <input type="text" placeholder="Last name" name="last_name" required/>
+                              <i class="uil uil-user"></i>
+                            </div>
+                            <div class="input-field">
+                                <input type="email" placeholder="email Address" name="email" required>
                                 <i class="uil uil-envelope icon"></i>
                             </div>
                             <div class="input-field">
-                                <input type="tel" placeholder="your phone number" name="phone_number" required/>
+                                <input type="tel" placeholder="phone number" name="phone_number" required/>
                                 <i class="uil uil-phone icon"></i>
                             </div>
                             <div class="input-field">
-                              <input type="tel" placeholder="Delivery Address " name="address" required/>
+                              <input type="tel" placeholder="Delivery Address " name="address_line_1" required/>
                               <i class="uil uil-phone icon"></i>
                             </div>
                             <div class="input-field">
-                              <input type="tel" placeholder="country Name" name="phone_number" required/>
+                              <input type="tel" placeholder="country Name" name="country" required/>
                               <i class="uil uil-phone icon"></i>
                             </div>
                             <div class="input-field">
-                              <input type="tel" placeholder="State Name" name="phone_number" required/>
+                              <input type="tel" placeholder="State Name" name="state" required/>
                               <i class="uil uil-phone icon"></i>
                             </div>
                             <div class="input-field">
-                              <input type="tel" placeholder="Zip Code" name="phone_number" required/>
+                              <input type="tel" placeholder="City Name" name="city" required/>
+                              <i class="uil uil-phone icon"></i>
+                            </div>
+                            <div class="input-field">
+                              <input type="tel" placeholder="Zip Code" name="pincode" required/>
                               <i class="uil uil-phone icon"></i>
                             </div>
                         
@@ -136,7 +144,7 @@
 
               <input type="text" name="discount-token" id="discount-token" class="input-default">
 
-              <button class="btn btn-outline">Apply</button>
+              <a class="btn btn-outline">Apply</a>
 
             </div>
 

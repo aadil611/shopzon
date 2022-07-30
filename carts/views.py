@@ -65,7 +65,7 @@ def add_cart(request,product_id):
   else:
     cart_items = CartItem.objects.filter(product=product,cart=cart)
 
-  cart_item_exists = cart_items.exists
+  cart_item_exists = cart_items.exists()
   if cart_item_exists:
     existing_variation_list = []
     ids = []
@@ -79,15 +79,17 @@ def add_cart(request,product_id):
       cart_item = CartItem.objects.get(id=item_id)
       cart_item.quantity += 1
     else:
-      cart_item = CartItem.objects.create(product=product,cart=cart,quantity=1)
+      if request.user.is_authenticated:
+        cart_item = CartItem.objects.create(product=product,user=request.user,quantity=1)
+      else:
+        cart_item = CartItem.objects.create(product=product,cart=cart,quantity=1)
       if len(variation_list)>0:
         cart_item.variation.add(*variation_list)
   else:
-    cart_item = CartItem.objects.create(
-      product   = product,
-      cart      = cart,
-      quantity  = 1
-    )
+    if request.user.is_authenticated:
+      cart_item = CartItem.objects.create(product=product,user=request.user,quantity=1)
+    else:
+      cart_item = CartItem.objects.create(product=product,cart=cart,quantity=1)
     cart_item.variation.add(*variation_list)
   cart_item.save()
   

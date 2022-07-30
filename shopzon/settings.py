@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'store',
     'channels',
     'utils',
-    'carts'
+    'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,6 @@ STATICFILES_DIRS = ['shopzon/static']
 # media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'

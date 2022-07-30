@@ -28,6 +28,7 @@ urlpatterns = [
     path('get_sub_category/',get_sub_category),
     path('get_countdown/',utilsviews.get_countdown),
     path('store/',include(storeurls)),
-    path('cart/',include('carts.urls')),
+    path('carts/',include('carts.urls')),
     path('accounts/',include('accounts.urls')),
+    path('orders/',include('orders.urls')),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -12,7 +12,7 @@ def get_percentage(value,args):
   return (args / value) * 100
 
 def mul(value,args):
-  return value * args 
+  return int(value * args)
 
 def div(value,args):
   return int(value // args)

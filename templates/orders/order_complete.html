@@ -1,0 +1,27 @@
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/orders/order_complete.css' %}" >
+{% endblock %}
+
+{% block content %}
+  <div class="popup-container">
+    <div class="popup" id="popup"> 
+      <img src="{% static 'assets/images/logo/tick.png' %}">
+      <h2> Thank You!</h2>
+      <p> Your order has been placed successfully. You will shortly receive a mail from us. Thanks! </p>
+      <a  type="button" onclick="showInvoice()"  class="ok-btn"> View Invoice</a>
+    </div>
+  </div>
+  <script>
+    let popup= document.getElementById('popup');
+
+    function openPopup() {
+      popup.classList.add('open-popup');
+    }
+
+    function closePopup() {
+      popup.classList.remove('open-popup');
+    }
+  </script>
+{% endblock %}
