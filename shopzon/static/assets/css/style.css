@@ -431,6 +431,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .header-user-actions,
 .desktop-navigation-menu { display: none; }
 
+
 .header-main {
   padding: 20px 0;
   border-bottom: 1px solid var(--cultured);
@@ -2234,6 +2235,10 @@ footer {
     padding: 5px;
   }
 
+  .header-user-actions .action-btn a ion-icon {
+    color: var(--onyx);
+  }
+
   .header-user-actions .count {
     position: absolute;
     top: -2px;
@@ -2796,11 +2801,11 @@ footer {
   pointer-events: none;
 }
 
-.error-border {
+.alert-div .error-border {
   border-left: 6px solid var(--bittersweet);
 }
 
-.success-border {
+.alert-div .success-border {
   border-left: 6px solid green;
 }
 

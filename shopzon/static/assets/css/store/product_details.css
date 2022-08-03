@@ -177,6 +177,136 @@ img{
 }
 
 
+/********* Rating System *************/
+
+.user-reviews-box{ 
+  margin:10px 0;
+  background:white;
+  height:auto;
+  padding:10px;
+}
+
+
+.user-reviews-box .header {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-review{
+  /* border:1px solid var(--bittersweet); */
+  border-radius:15px;
+  padding:5px 15px;
+  width:50%;
+  box-shadow: 1px 1px 5px 2px rgb(76, 196, 72);
+}
+
+.user-reviews-box .header .review-text { 
+  display:flex;
+  align-items: center;
+}
+
+.review-stars {
+  color:var(--bittersweet);
+}
+
+.user-reviews-box .header .review-text h6{ 
+  margin-right:15px;
+}
+
+.user-reviews-box  h4{
+  margin-bottom: 10px;
+}
+
+.user-reviews-box .header img {
+  height:50px;
+  width:50px;
+  border-radius: 50px;
+  margin:5px;
+}
+
+.review-box{
+  background:white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.review-box h2{
+  margin-bottom: 30px;
+}
+
+.review-box h5{
+  margin:10px 0;
+}
+
+.rate label { 
+  color:var(--spanish-gray);
+}
+
+.rate > input {
+  display:none;
+}
+
+.rate {
+  display:inline-block;
+}
+
+.rate > label{
+  float:right;
+}
+
+.form-control {
+  display:block;
+  width:50%;
+  border-radius: 5px;
+  padding:5px;
+}
+
+.submit-review-btn{
+  padding:5px 10px;
+  background:var(--bittersweet);
+  width:auto;
+  border:none;
+  border-radius: 5px;
+  color:white;
+  cursor:pointer;
+  opacity: 0.9;
+}
+
+.submit-review-btn:hover{ 
+  opacity: 1;
+}
+
+/* showing stars */
+.rate > label:before{
+  display:inline-block;
+  font-size: 1.1rem;
+  font-family: FontAwesome;
+  content: "\f005";
+  margin:0;
+  padding: 0.3rem .2rem;
+  cursor:pointer;
+}
+
+
+/* Half stars */
+.rate .half:before{
+  content: "\f089";
+  position: absolute;
+  padding-right: 0;
+}
+
+/* click and hover the stars */
+input:checked ~ label, label:hover ~ label{
+  color:#ffb503;
+}
+
+input:checked + label:hover, input:checked ~ label:hover, input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label{
+  color:#cc9000;
+}
+
+
 @media screen and (max-width: 992px){
     .product-div{
         grid-template-columns: 100%;

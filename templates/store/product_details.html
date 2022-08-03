@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-
+  {% include 'includes/alerts.html' %}
   <div class = "main-wrapper">
     <div class = "container">
         <div class = "product-div">
@@ -31,12 +31,14 @@
                   <del>&#8377; {{product.price | add:103 }}</del>
                 </div>
                 <div class = "product-rating">
-                    <span><i class = "fas fa-star"></i></span>
-                    <span><i class = "fas fa-star"></i></span>
-                    <span><i class = "fas fa-star"></i></span>
-                    <span><i class = "fas fa-star"></i></span>
-                    <span><i class = "fas fa-star-half-alt"></i></span>
-                    <span>(350 ratings)</span>
+                  <span class="review-stars">
+                    <i class="fa-star{% if avg_rating == 0.5 %}-half-alt fas{% elif avg_rating < 1 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                    <i class="fa-star{% if avg_rating == 1.5 %}-half-alt fas{% elif avg_rating < 2 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                    <i class="fa-star{% if avg_rating == 2.5 %}-half-alt fas{% elif avg_rating < 3 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                    <i class="fa-star{% if avg_rating == 3.5 %}-half-alt fas{% elif avg_rating < 4 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                    <i class="fa-star{% if avg_rating == 4.5 %}-half-alt fas{% elif avg_rating < 5 %} far {% else %} fas {% endif %}  " aria-hidden="true"></i>
+                  </span>
+                    <span>({{product.review_count}} ratings)</span> {{avg_rating}}
                 </div>
                 <p class = "product-description">{{product.description}}</p>
 
@@ -93,7 +95,103 @@
                 </form>
             </div>
         </div>
+        {% comment %} <div >   
+          <h2> Customer Reviews </h2>
+          <h5> Write your Reviews </h5>
+          <div>
+            <label> How do you rate this product </label>
+
+          </div>
+        </div> {% endcomment %}
+
+        <div class="review-box">
+          <form action="{% url 'submit_review' %}" method="POST">
+            {% csrf_token %}
+            <h2> Customer Reviews </h2>
+            <h5>Write your Review</h5>
+            <div>
+              <!-- Rating Starts -->
+              <label for="">How do your rate this product ?</label>
+              <br/>
+              <div class="rate">
+                <input type="radio" name="rating" id="rating10" value="5" required />
+                <label for="rating10" title="5"></label>
+                <input type="radio" name="rating" id="rating9" value="4.5" required />
+                <label for="rating9" title="4.5" class="half"></label>
+                <input type="radio" name="rating" id="rating8" value="4" required />
+                <label for="rating8" title="4"></label>
+                <input type="radio" name="rating" id="rating7" value="3.5" required />
+                <label for="rating7" title="3.5" class="half"></label>
+                <input type="radio" name="rating" id="rating6" value="3" required />
+                <label for="rating6" title="3"></label>
+                <input type="radio" name="rating" id="rating5" value="2.5" required />
+                <label for="rating5" title="2.5" class="half"></label>
+                <input type="radio" name="rating" id="rating4" value="2" required />
+                <label for="rating4" title="2"></label>
+                <input type="radio" name="rating" id="rating3" value="1.5" required />
+                <label for="rating3" title="1.5" class="half"></label>
+                <input type="radio" name="rating" id="rating2" value="1" required />
+                <label for="rating2" title="1"></label>
+                <input type="radio" name="rating" id="rating1" value="0.5" required />
+                <label for="rating1" title="0.5" class="half"></label>
+              </div>
+              <br>
+              Review Title:
+              <input type="text" name="subject" id="" class="form-control" />
+              <br>
+              Review:
+              <textarea
+                name="review"
+                id=""
+                cols="30"
+                rows="4"
+                class="form-control"
+              ></textarea>
+              <br />
+              <input type="hidden" name="product_id" value="{{product.id}}" />
+              {% if request.user.is_authenticated %}
+                {% if purchased %}
+                  <input type="submit" value="submit review" class="submit-review-btn" />
+                {% else %}
+                  <h4> You must purchase this product before writing a review </h4>
+                {% endif %}
+              {% else %}
+                <h4> You must login to write a review </h4>
+              {% endif %}
+            </div>
+            
+          </form>
+        </div>
+
+        {% for message in messages %}
+          {{ message.tags}} : {{ message.message}}
+        {% endfor %}
+
+        <div class="user-reviews-box"> 
+          {% for review in reviews %}
+            <div class="user-review">
+              <div class="header">
+                <div class="review-text">
+                  <img src="{% static 'assets/images/user.jpeg' %}" alt="">
+                  <h6> {{review.user.first_name | capfirst}} {{review.user.last_name | capfirst}}</h6>
+                  <span class="review-stars">
+                      <i class="fa-star{% if review.rating == 0.5 %}-half-alt fas{% elif review.rating < 1 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if review.rating == 1.5 %}-half-alt fas{% elif review.rating < 2 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if review.rating == 2.5 %}-half-alt fas{% elif review.rating < 3 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if review.rating == 3.5 %}-half-alt fas{% elif review.rating < 4 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if review.rating == 4.5 %}-half-alt fas{% elif review.rating < 5 %} far {% else %} fas {% endif %}  " aria-hidden="true"></i>
+                  </span> &nbsp;{{ review.rating}} 
+                </div>
+                <span> {{review.updated_at}} </span>
+              </div>
+              <div>
+                <h4> {{review.subject}}</h4>
+                <p> {{review.review}}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
     </div>
   </div>
-
+  
 {% endblock %}

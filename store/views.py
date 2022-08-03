@@ -1,5 +1,5 @@
-from django.shortcuts import render,get_object_or_404
-from .models import Product
+from django.shortcuts import render,get_object_or_404,redirect
+from .models import Product,ReviewRating
 from carts.models import Cart,CartItem,WishList
 from carts.views import _cart_id
 from category.models import Category,SubCategory
@@ -7,6 +7,10 @@ from random import choice,randint
 from django.core import serializers
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from .forms import ReviewRatingForm
+from orders.models import OrderProduct
+from django.contrib import messages
+from django.db.models import Avg
 import json
 
 # Create your views here
@@ -83,6 +87,18 @@ def product_details(request,slug):
   for cart_item in cart_items:
     for variation in cart_item.variation.all():
       variations.append(variation)
+
+  try:
+    purchased = OrderProduct.objects.filter(user__id=request.user.id,product__slug=slug).exists()
+    reviews = ReviewRating.objects.filter(user__id=request.user.id,product=product)
+  except OrderProduct.DoesNotExist:
+    purchased = None
+
+  average = ReviewRating.objects.filter(product=product,status=True).aggregate(avg=Avg('rating'))
+  avg = 0 
+  if average['avg'] is not None:
+    if average['avg'] > 0:
+      avg = float(average['avg'])
   
   context = {
     'product':product,
@@ -90,6 +106,9 @@ def product_details(request,slug):
     'in_wishlist':in_wishlist,
     'in_cart':in_cart,
     'variations':variations,
+    'purchased':purchased,
+    'reviews':reviews,
+    'avg_rating':avg
   }
   return render(request,'store/product_details.html',context)
 
@@ -110,3 +129,26 @@ def get_cart_variations(request,product_id):
     pass
   print(variations)
   return HttpResponse(json.dumps({'variations':variations}),content_type='application/json')
+
+
+def submit_review(request):
+  if request.method == 'POST':
+    try:
+        review = ReviewRating.objects.get(user__id=request.user.id,product__id=request.POST['product_id'])
+        form = ReviewRatingForm(request.POST,instance=review)
+        form.save()
+        messages.success(request,'Review Updated successfully')
+    except:
+      form = ReviewRatingForm(request.POST)
+      if form.is_valid():
+        review = ReviewRating()
+        review.user_id = request.user.id
+        review.product_id = request.POST.get('product_id')
+        review.subject = form.cleaned_data['subject']
+        review.review = form.cleaned_data['review']
+        review.rating = form.cleaned_data['rating']
+        review.ip = request.META.get('REMOTE_ADDR')
+        review.save()
+        messages.success(request,'Review submitted successfully')
+
+  return redirect(request.META.get('HTTP_REFERER'))
