@@ -24,7 +24,7 @@
       <div class="header-user-actions">
         {% if user.is_authenticated %}
           <button class="action-btn">
-            <a href="{% url 'login' %}">
+            <a href="{% url 'dashboard' %}">
               <ion-icon name="person-outline"></ion-icon>
               <span class="count">{{user.first_name | capfirst }}</span>
             </a>

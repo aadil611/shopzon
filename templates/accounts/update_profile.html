@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/accounts/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="docontainer">
+    {% include 'includes/dashboard_sidebar.html' %}
+    <div class="dcontainer">
+      <div class="dcontent">
+          <div class="dcontent-2">
+              <div class="recent-payments">
+                  <div class="title">
+                      <h2>Update Profile</h2>
+                  </div>
+                  
+                  <div class="profile-container">
+                    {% if user_profile.profile_picture %}
+                      <img src="{{user_profile.profile_picture.url}}" alt="profile picture">
+                    {% endif %}
+                    <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data"> 
+                      {% csrf_token %}
+                      <div class="form-control">
+                        <label>First Name</label>
+                        <input type="text"  value="{{request.user.first_name}}" name="first_name">
+                      </div>
+                      <div class="form-control">
+                        <label> Last Name</label>
+                        <input type="text"  value="{{request.user.last_name}}" name="last_name">
+                      </div>
+                      <div class="form-control">
+                        <label> Phone Number</label>
+                        <input type="text" value="{{request.user.phone_number}}" name="phone_number">
+                      </div>
+                      <div class="form-control">
+                        <label> Profile Picture</label>
+                        <input type="file" name="profile_picture">
+                      </div>
+                      <div class="form-control">
+                        <label> Address</label>
+                        <input type="text" value="{{user_profile.address}}" name="address">
+                      </div>
+                      
+                      <div class="form-control">
+                        <label> Country </label>
+                        <input type="text" value="{{user_profile.country}}" name="country">
+                      </div>
+                      <div class="form-control">
+                        <label> State</label>
+                        <input type="text" value="{{user_profile.state}}" name="state">
+                      </div>
+                      <div class="form-control">
+                        <label> City</label>
+                        <input type="text" value="{{user_profile.city}}" name="city">
+                      </div>
+                      <input type="hidden" name="user_id" value="{{request.user.id}}">
+                      <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

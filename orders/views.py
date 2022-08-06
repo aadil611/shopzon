@@ -105,6 +105,10 @@ def payment(request):
 
 
 def payment_complete(request):
+  return redirect('invoice')
+
+
+def invoice(request):
   order_id = request.GET.get('order_id')
   order = Order.objects.get(order_number=order_id)
   order_products = OrderProduct.objects.filter(order=order)

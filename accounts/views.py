@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect
-from .forms import RegistrationForm
-from .models import Account
+from .forms import RegistrationForm,UserForm,UserProfileForm
+from .models import Account,UserProfile
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required
 from carts.models import Cart,CartItem
 from carts.views import _cart_id
 from store.models import Variation
 import requests
+from orders.models import Order,OrderProduct,Payment
+from django.core.paginator import Paginator
 
 # lib for email verificatiron
 from django.contrib.sites.shortcuts import get_current_site
@@ -21,12 +23,12 @@ def register(request):
   if request.method == 'POST':
     form = RegistrationForm(request.POST)
     if form.is_valid():
-      first_name = form.cleaned_data['first_name']
-      last_name = form.cleaned_data['last_name']
-      email = form.cleaned_data['email']
-      phone_number = form.cleaned_data['phone_number']
-      password = form.cleaned_data['password']
-      username = email.split('@')[0]
+      first_name    = form.cleaned_data['first_name']
+      last_name     = form.cleaned_data['last_name']
+      email         = form.cleaned_data['email']
+      phone_number  = form.cleaned_data['phone_number']
+      password      = form.cleaned_data['password']
+      username      = email.split('@')[0]
 
 
       user = Account.objects.create(first_name=first_name,username=username, last_name=last_name, email=email)
@@ -44,11 +46,11 @@ def register(request):
         'token': default_token_generator.make_token(user),
       })
 
-      sender = 'gkorigin26@gmail.com'
-      password = 'kbdjhjffkihmcfxx'
-      receiver = email 
-      message = 'Subject: {}\n\n{}'.format(mail_subject, message_body)
-      context = ssl.create_default_context()
+      sender    = 'gkorigin26@gmail.com'
+      password  = 'kbdjhjffkihmcfxx'
+      receiver  = email
+      message   = 'Subject: {}\n\n{}'.format(mail_subject, message_body)
+      context   = ssl.create_default_context()
 
       with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as server:
         server.login(sender,password)
@@ -160,7 +162,21 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-  return render(request, 'accounts/dashboard.html')
+  paid_orders = Order.objects.filter(user=request.user,is_ordered=True)
+  pending_orders = Order.objects.filter(user=request.user,is_ordered=False)
+  payments = Payment.objects.filter(user=request.user)
+  ordered_products = OrderProduct.objects.filter(user=request.user)
+
+  context = {
+    'paid_orders': paid_orders,
+    'paid_orders_count': paid_orders.count(),
+    'payments': payments,
+    'payments_count': payments.count(),
+    'pending_orders': pending_orders,
+    'pending_orders_count': pending_orders.count(),
+    'ordered_products': ordered_products,
+  }
+  return render(request, 'accounts/dashboard.html',context)
 
 
 def forgot_password(request):
@@ -229,3 +245,82 @@ def reset_password(request):
       messages.error(request,'password does not match, please try again')
       return redirect('reset_password')
   return render(request, 'accounts/reset_password.html')
+
+
+@login_required(login_url='login')
+def my_orders(request):
+  orders          = Order.objects.filter(user=request.user)
+  paginator       = Paginator(orders,10)
+  page            = request.GET.get('page')
+  paged_orders    = paginator.get_page(page)
+  context = {
+    'orders': paged_orders,
+    'order_counts': orders.count()
+  }
+  return render(request, 'accounts/myorders.html', context)
+
+
+@login_required(login_url='login')
+def my_payments(request):
+  payments          = Payment.objects.filter(user=request.user)
+  paginator         = Paginator(payments,10)
+  page              = request.GET.get('page')
+  paged_payments    = paginator.get_page(page)
+  context = {
+    'payments'          : paged_payments,
+    'payment_counts'    : payments.count(),
+  }
+  return render(request, 'accounts/mypayments.html', context)
+
+
+@login_required(login_url='login')
+def update_profile(request):
+  if request.method == 'POST':
+    try:
+      user_profile = UserProfile.objects.get(user=request.user)
+      user_profile_form = UserProfileForm(request.POST,request.FILES,instance=user_profile)
+    except:
+      print('EXCEPTION OCCURED')
+      user_profile = UserProfile.objects.create(user_id=request.POST.get('user_id'))
+      user_profile_form = UserProfileForm(request.POST,request.FILES,instance=user_profile)
+
+    user_form = UserForm(request.POST,instance=request.user)
+    if user_form.is_valid() and user_profile_form.is_valid():
+      user_form.save()
+      user_profile_form.save()
+      messages.success(request,'Profile updated successfully')
+      return redirect('update_profile')
+  
+  try:
+    user_profile = UserProfile.objects.get(user=request.user)
+  except:
+    user_profile = None
+  context = {
+    'user_profile':user_profile
+  }
+  return render(request, 'accounts/update_profile.html',context)
+
+
+@login_required(login_url='login')
+def change_password(request):
+  if request.method == 'POST':
+    old_password = request.POST.get('old_password')
+    new_password = request.POST.get('new_password')
+    confirm_password = request.POST.get('confirm_password')
+
+    if new_password == confirm_password:
+      user = Account.objects.get(username__exact=request.user.username)
+
+      if user.check_password(old_password):
+        user.set_password(new_password)
+        user.save()
+        messages.success(request,'Your Password has been changed successfully')
+        return redirect('change_password')
+      else:
+        messages.error(request,'Old password is incorrect')
+        return redirect('change_password')
+    else:
+      messages.error(request,'new password and confirm password are not same')
+      return redirect('change_password')
+
+  return render(request, 'accounts/change_password.html')

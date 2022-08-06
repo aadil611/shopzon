@@ -7,24 +7,16 @@
 
 {% block content %}
   <div class="docontainer">
-    <div class="dside-menu">
-      <ul>
-          <li><img src="dashboard (2).png" alt="">&nbsp; <span>Dashboard</span> </li>
-          <li><img src="reading-book (1).png" alt="">&nbsp;<span>Students</span> </li>
-          <li><img src="teacher2.png" alt="">&nbsp;<span>Teachers</span> </li>
-          <li><img src="school.png" alt="">&nbsp;<span>Schools</span> </li>
-          <li><img src="payment.png" alt="">&nbsp;<span>Income</span> </li>
-          <li><img src="help-web-button.png" alt="">&nbsp; <span>Help</span></li>
-          <li><img src="settings.png" alt="">&nbsp;<span>Settings</span> </li>
-      </ul>
-    </div>
+    {% include 'includes/dashboard_sidebar.html' %}
     <div class="dcontainer">
       <div class="dcontent">
           <div class="dcards">
               <div class="dcard">
                   <div class="box">
-                      <h1>2194</h1>
-                      <h3>Students</h3>
+                    <a href="{% url 'my_orders' %}">
+                      <h1>{{paid_orders_count}}</h1>
+                      <h3>Paid Orders</h3>
+                    </a>
                   </div>
                   <div class="icon-case">
                       <img src="students.png" alt="">
@@ -32,8 +24,8 @@
               </div>
               <div class="dcard">
                   <div class="box">
-                      <h1>53</h1>
-                      <h3>Teachers</h3>
+                      <h1>{{payments_count}}</h1>
+                      <h3>Payments</h3>
                   </div>
                   <div class="icon-case">
                       <img src="teachers.png" alt="">
@@ -41,17 +33,17 @@
               </div>
               <div class="dcard">
                   <div class="box">
-                      <h1>5</h1>
-                      <h3>Schools</h3>
+                      <h1>{{pending_orders_count}}</h1>
+                      <h3>Pending Orders</h3>
                   </div>
                   <div class="icon-case">
                       <img src="schools.png" alt="">
                   </div>
               </div>
-              <div class="dcard">
+              <div class="dcard last-dcard">
                   <div class="box">
-                      <h1>350000</h1>
-                      <h3>Income</h3>
+                      <h1>{{request.user.first_name}} {{request.user.last_name}}</h1>
+                      <h3>{{request.user.email}}</h3>
                   </div>
                   <div class="icon-case">
                       <img src="income.png" alt="">
@@ -61,88 +53,34 @@
           <div class="dcontent-2">
               <div class="recent-payments">
                   <div class="title">
-                      <h2>Recent Payments</h2>
-                      <a href="#" class="dbtn">View All</a>
+                      <h2>Recent Orders</h2>
+                      <a href="{% url 'my_payments' %}" class="dbtn">View All</a>
                   </div>
                   <table>
                       <tr>
-                          <th>Name</th>
-                          <th>School</th>
+                          <th>OrderID</th>
+                          <th>PaymentID</th>
                           <th>Amount</th>
-                          <th>Option</th>
+                          <th>Tax</th>
+                          <th>Phone</th>
+                          <th>Date</th>
+                          <th>Action</th>
                       </tr>
-                      <tr>
-                          <td>John Doe</td>
-                          <td>St. James College</td>
-                          <td>$120</td>
-                          <td><a href="#" class="dbtn">View</a></td>
-                      </tr>
-                      <tr>
-                          <td>John Doe</td>
-                          <td>St. James College</td>
-                          <td>$120</td>
-                          <td><a href="#" class="dbtn">View</a></td>
-                      </tr>
-                      <tr>
-                          <td>John Doe</td>
-                          <td>St. James College</td>
-                          <td>$120</td>
-                          <td><a href="#" class="dbtn">View</a></td>
-                      </tr>
-                      <tr>
-                          <td>John Doe</td>
-                          <td>St. James College</td>
-                          <td>$120</td>
-                          <td><a href="#" class="dbtn">View</a></td>
-                      </tr>
-                      <tr>
-                          <td>John Doe</td>
-                          <td>St. James College</td>
-                          <td>$120</td>
-                          <td><a href="#" class="dbtn">View</a></td>
-                      </tr>
-                      <tr>
-                          <td>John Doe</td>
-                          <td>St. James College</td>
-                          <td>$120</td>
-                          <td><a href="#" class="dbtn">View</a></td>
-                      </tr>
+                      {% for order in paid_orders %}
+                        <tr>
+                          <td>{{order.order_number}}</td>
+                          <td>{{order.payment.payment_id}}</td>
+                          <td>{{order.order_total}}</td>
+                          <td>{{order.tax}}</td>
+                          <td>{{order.phone_number}}</td>
+                          <td>{{ order.created_at }}</td>
+                          <td><a href="{% url 'invoice' %}?order_id={{order.order_number}}" class="dbtn">Invoice</a></td>
+                        </tr>
+                      {% endfor %}
+                      
                   </table>
               </div>
-              <div class="new-students">
-                  <div class="title">
-                      <h2>New Students</h2>
-                      <a href="#" class="dbtn">View All</a>
-                  </div>
-                  <table>
-                      <tr>
-                          <th>Profile</th>
-                          <th>Name</th>
-                          <th>option</th>
-                      </tr>
-                      <tr>
-                          <td><img src="user.png" alt=""></td>
-                          <td>John Steve Doe</td>
-                          <td><img src="info.png" alt=""></td>
-                      </tr>
-                      <tr>
-                          <td><img src="user.png" alt=""></td>
-                          <td>John Steve Doe</td>
-                          <td><img src="info.png" alt=""></td>
-                      </tr>
-                      <tr>
-                          <td><img src="user.png" alt=""></td>
-                          <td>John Steve Doe</td>
-                          <td><img src="info.png" alt=""></td>
-                      </tr>
-                      <tr>
-                          <td><img src="user.png" alt=""></td>
-                          <td>John Steve Doe</td>
-                          <td><img src="info.png" alt=""></td>
-                      </tr>
-
-                  </table>
-              </div>
+              
           </div>
       </div>
     </div>

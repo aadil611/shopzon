@@ -2703,7 +2703,7 @@ footer {
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
 }
 
-#alert-toast.active{
+#alert-toast.alert-active{
   transform: translateX(0%);
 }
 
@@ -2771,7 +2771,7 @@ footer {
   width: 100%;
 }
 
-#alert-progress.active:before{
+#alert-progress.alert-active:before{
   animation: progress 5s linear forwards;
 }
 

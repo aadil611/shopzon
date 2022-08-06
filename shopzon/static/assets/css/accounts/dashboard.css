@@ -1,4 +1,5 @@
 .docontainer {
+  height:auto;
   min-height: 100vh;
   font-size:12px;
   background:#f1f1f1;
@@ -65,14 +66,18 @@ h2 {
 
 .dside-menu li {
   font-size: 16px;
-  padding: 10px 40px;
+  padding: 10px 20px;
   background: white;
   color: var(--bittersweet);
   display: flex;
   align-items: center;
-  border:0px solid black;
   border-radius:5px;
-  margin:1px 0px;
+  margin:1px 5px;
+}
+
+.dside-menu li a {
+  text-decoration: inherit;
+  color:inherit;
 }
 
 .dside-menu li:hover {
@@ -80,13 +85,19 @@ h2 {
   color: white;
 }
 
+.active {
+  background: #f05462 !important;
+  color: white !important;
+}
+
 .dcontainer {
   position: absolute;
+  margin:10px;
   right: 0;
   width: 80vw;
-  height: 100vh;
+  height: auto;
   background: white;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .dcontainer .dheader {
@@ -165,7 +176,7 @@ h2 {
 .dcontainer .dcontent {
   /* position: absolute; */
   margin-top: 0;
-  min-height: 100vh;
+  min-height: 90vh;
   background: #f1f1f1;
   padding:0 50px;
 }
@@ -178,14 +189,21 @@ h2 {
   flex-wrap: wrap;
 }
 
+.last-dcard{
+  width:250px !important;
+}
+
 .dcontainer .dcontent .dcards .dcard {
+  text-align: center;
   width: 150px;
+  max-width:250px;
   height: 100px;
   background: white;
   margin: 20px 10px;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -220,6 +238,84 @@ h2 {
 .dcontainer .dcontent .dcontent-2 .new-students table td:nth-child(1) img {
   height: 40px;
   width: 40px;
+}
+
+
+/* ********* Update Profile ***************/
+.profile-container .form-control{
+  width:45%;
+  display:inline-block;
+  margin:10px;
+}
+
+.profile-container .form-control input{
+  border-radius:5px ;
+  border:none;
+  border-bottom:1px solid #ccc;
+  padding:5px 10px;
+  color:#797775;
+}
+
+.profile-container .form-control input:focus{
+  outline:none;
+  border-bottom:2px solid var(--bittersweet);
+}
+
+.profile-container .form-control label{
+  margin-left:10px;
+}
+
+.profile-container img{ 
+  width:120px;
+  height:120px;
+  margin:0 15px;
+  border-radius: 50%;
+}
+
+.btn {
+  padding:10px 15px;
+  background:#3c52c1;
+  border-radius: 5px;
+  margin:10px 15px;
+  color:white;
+}
+
+.btn:hover{
+  background:#222bd6;
+}
+
+
+.password-container{
+  display:flex;
+  justify-content:center;
+}
+
+.password-container .form-control input{
+  border-radius:5px ;
+  border:none;
+  border-bottom:1px solid #ccc;
+  padding:5px 10px;
+  color:#797775;
+}
+
+.password-container .form-control{
+  margin:10px;
+}
+
+.password-container .form-control input:focus{
+  outline:none;
+  border-bottom:2px solid var(--bittersweet);
+}
+
+.password-container .form-control label{
+  margin-left:10px;
+}
+
+
+/* *********End Update Profile ***************/
+
+.pagination{
+  margin:0 5%;
 }
 
 @media screen and (max-width: 1050px) {

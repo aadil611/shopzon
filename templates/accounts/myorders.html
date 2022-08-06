@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/accounts/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="docontainer">
+    {% include 'includes/dashboard_sidebar.html' %}
+    <div class="dcontainer">
+      <div class="dcontent">
+          <div class="dcontent-2">
+              <div class="recent-payments">
+                  <div class="title">
+                      <h2>My Orders</h2>
+                      
+                  </div>
+                  <table>
+                      <tr>
+                          <th>OrderID</th>
+                          <th>PaymentID</th>
+                          <th>Amount</th>
+                          <th>Tax</th>
+                          <th>Phone</th>
+                          <th>Date</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                      </tr>
+                      {% for order in orders %}
+                        <tr>
+                          <td>{{order.order_number}}</td>
+                          <td>
+                            {% if order.payment.payment_id%}
+                              {{order.payment.payment_id}}
+                            {% else %}
+                              <span style="color:red"> Unpaid </span>
+                            {% endif %}
+                          </td>
+                          <td>{{order.order_total}}</td>
+                          <td>{{order.tax}}</td>
+                          <td>{{order.phone_number}}</td>
+                          <td>{{ order.created_at | date:"Y-m-d"}}</td>
+                          <td>{{ order.status }}</td>
+                          <td>
+                            {% if order.is_ordered %}
+                              <a href="{% url 'invoice' %}?order_id={{order.order_number}}" class="dbtn">Invoice</a>
+                            {% else %}
+                              <a href="{% url 'invoice' %}?order_id={{order.order_number}}" class="dbtn">Pay Now</a>
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      
+                  </table>
+              </div>
+          </div>
+          {% if orders.has_other_pages %}
+            <div class="pagination">
+              {% if orders.has_previous %}
+                <a href="?page={{ orders.previous_page_number}}"> prev </a>
+              {% endif %}
+              {% for i in orders.paginator.page_range %}
+                {% if orders.number == i%}
+                  <a href="?page={{i}}" class="active"> {{i}} </a> 
+                {% else %}
+                  <a href="?page={{i}}"> {{i}} </a> 
+                {% endif %}
+              {% endfor %}
+              {% if orders.has_next %}
+                <a href="?page={{ orders.next_page_number}}"> next </a>
+              {% endif %}
+            </div>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

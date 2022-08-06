@@ -67,3 +67,16 @@ class Account(AbstractBaseUser):
 
   def has_module_perms(self,add_label):
     return True 
+
+
+
+class UserProfile(models.Model):
+  user = models.OneToOneField(Account,on_delete=models.CASCADE)
+  address = models.CharField(max_length=128,blank=True)
+  profile_picture = models.ImageField(blank=True,upload_to='photos/userprofiles/')
+  country = models.CharField(max_length=64,blank=True)
+  state = models.CharField(max_length=64,blank=True)
+  city = models.CharField(max_length=64,blank=True)
+
+  def __str__(self):
+    return self.user.first_name

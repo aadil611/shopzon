@@ -282,23 +282,23 @@ const alert_toast = document.getElementById("alert-toast"),
       let timer1, timer2;
 
       document.addEventListener("DOMContentLoaded", () => {
-        alert_toast.classList.add("active");
-        alert_progress.classList.add("active");
+        alert_toast.classList.add("alert-active");
+        alert_progress.classList.add("alert-active");
 
         timer1 = setTimeout(() => {
-            alert_toast.classList.remove("active");
+            alert_toast.classList.remove("alert-active");
         }, 5000); //1s = 1000 milliseconds
 
         timer2 = setTimeout(() => {
-          alert_progress.classList.remove("active");
+          alert_progress.classList.remove("alert-active");
         }, 5300);
       });
       
       closeIcon.addEventListener("click", () => {
-        alert_toast.classList.remove("active");
+        alert_toast.classList.remove("alert-active");
         
         setTimeout(() => {
-          alert_progress.classList.remove("active");
+          alert_progress.classList.remove("alert-active");
         }, 300);
 
         clearTimeout(timer1);

@@ -1,0 +1,9 @@
+<div class="dside-menu">
+  <ul>
+      <a href="{% url 'dashboard' %}"><li class="{% if '/dashboard/' in request.path %}active {% endif %}">&nbsp;<span>Dashboard</span> </li></a>
+      <a href="{% url 'my_orders' %}"><li class="{% if '/my_orders/' in request.path %}active {% endif %}">&nbsp;<span>My Orders</span> </li></a>
+      <a href="{% url 'update_profile' %}"><li class="{% if '/update_profile/' in request.path %}active {% endif %}">&nbsp;<span>Update Profile</span> </li></a>
+      <a href="{% url 'change_password' %}"><li class="{% if '/change_password/' in request.path %}active {% endif %}">&nbsp;<span>Change Password</span> </li></a>
+      <a href="{% url 'my_payments' %}"><li class="{% if '/my_payments/' in request.path %}active {% endif %}">&nbsp;<span>My Payments</span> </li></a>
+  </ul>
+</div>

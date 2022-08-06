@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'assets/css/accounts/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="docontainer">
+    {% include 'includes/dashboard_sidebar.html' %}
+    <div class="dcontainer">
+      <div class="dcontent">
+          <div class="dcontent-2">
+              <div class="recent-payments">
+                  <div class="title">
+                      <h2>Payment History</h2>
+                      
+                  </div>
+                  <table>
+                      <tr>
+                          <th>PaymentID</th>
+                          <th>Method </th>
+                          <th>Amount</th>
+                          <th>Status</th>
+                          <th>Date</th>
+                      </tr>
+                      {% for payment in payments %}
+                        <tr>
+                          <td>{{payment.payment_id}}</td>
+                          <td>{{payment.payment_method}}</td>
+                          <td>{{payment.ammount_paid}}</td>
+                          <td>{{payment.status}}</td>
+                          <td>{{payment.created_at }}</td>
+                          
+                        </tr>
+                      {% endfor %}
+                      
+                  </table>
+              </div>
+          </div>
+          {% if payments.has_other_pages %}
+            <div class="pagination">
+              {% if payments.has_previous %}
+                <a href="?page={{ payments.previous_page_number}}"> prev </a>
+              {% endif %}
+              {% for i in payments.paginator.page_range %}
+                {% if payments.number == i%}
+                  <a href="?page={{i}}" class="active"> {{i}} </a> 
+                {% else %}
+                  <a href="?page={{i}}"> {{i}} </a> 
+                {% endif %}
+              {% endfor %}
+              {% if payments.has_next %}
+                <a href="?page={{ payments.next_page_number}}"> next </a>
+              {% endif %}
+            </div>
+          {% endif %}
+      </div>
+      
+    </div>
+  </div>
+{% endblock %}
