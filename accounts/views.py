@@ -166,7 +166,10 @@ def dashboard(request):
   pending_orders = Order.objects.filter(user=request.user,is_ordered=False)
   payments = Payment.objects.filter(user=request.user)
   ordered_products = OrderProduct.objects.filter(user=request.user)
-
+  user_profile  = UserProfile.objects.filter(user=request.user)
+  if user_profile.exists():
+    user_profile = user_profile[0]
+  print(' user is ---->',user_profile)
   context = {
     'paid_orders': paid_orders,
     'paid_orders_count': paid_orders.count(),
@@ -175,6 +178,7 @@ def dashboard(request):
     'pending_orders': pending_orders,
     'pending_orders_count': pending_orders.count(),
     'ordered_products': ordered_products,
+    'user_profile': user_profile
   }
   return render(request, 'accounts/dashboard.html',context)
 

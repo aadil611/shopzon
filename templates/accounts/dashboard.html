@@ -42,8 +42,14 @@
               </div>
               <div class="dcard last-dcard">
                   <div class="box">
-                      <h1>{{request.user.first_name}} {{request.user.last_name}}</h1>
-                      <h3>{{request.user.email}}</h3>
+                      <a href="{% url 'update_profile' %}">
+                        {% if user_profile %}
+                          <img src="{{user_profile.profile_picture.url}}" alt="user profile picture" />
+                        {% else %}
+                          <img src="{% static 'assets/images/user.png' %}" alt="user profile picture" />
+                        {% endif %}
+                        <h3>{{request.user.email}}</h3>
+                      </a>
                   </div>
                   <div class="icon-case">
                       <img src="income.png" alt="">
@@ -67,15 +73,17 @@
                           <th>Action</th>
                       </tr>
                       {% for order in paid_orders %}
-                        <tr>
-                          <td>{{order.order_number}}</td>
-                          <td>{{order.payment.payment_id}}</td>
-                          <td>{{order.order_total}}</td>
-                          <td>{{order.tax}}</td>
-                          <td>{{order.phone_number}}</td>
-                          <td>{{ order.created_at }}</td>
-                          <td><a href="{% url 'invoice' %}?order_id={{order.order_number}}" class="dbtn">Invoice</a></td>
-                        </tr>
+                        {% if forloop.counter <= 5 %}
+                          <tr>
+                            <td>{{order.order_number}}</td>
+                            <td>{{order.payment.payment_id}}</td>
+                            <td>{{order.order_total}}</td>
+                            <td>{{order.tax}}</td>
+                            <td>{{order.phone_number}}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td><a href="{% url 'invoice' %}?order_id={{order.order_number}}" class="dbtn">Invoice</a></td>
+                          </tr>
+                        {% endif %}
                       {% endfor %}
                       
                   </table>

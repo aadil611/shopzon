@@ -46,7 +46,7 @@
                   </div>
                   <div class="action-btn">
                     <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="a-btn"><button>Remove</button></a>
-                    <a href="{% url 'wishlist' cart_item.product.id %}" class="a-btn"> Wishlist </a>
+                    <a href="{% url 'move_to_wishlist' cart_item.id %}" class="a-btn"> Wishlist </a>
                   </div>
                 </div>
               </td>

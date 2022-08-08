@@ -193,6 +193,23 @@ h2 {
   width:250px !important;
 }
 
+.last-dcard .box a{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.last-dcard .box img{
+  height:40px ;
+  width:60px ;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.last-dcard .box h3{
+  font-size: 12px;
+}
+
 .dcontainer .dcontent .dcards .dcard {
   text-align: center;
   width: 150px;

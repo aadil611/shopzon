@@ -155,6 +155,27 @@ def remove_wishlist(request,product_id):
   return redirect(request.META.get('HTTP_REFERER','show_wishlist'))
 
 
+def move_to_cart(request,product_id):
+  product = Product.objects.get(id=product_id)
+  wishlist = WishList.objects.get(product=product)
+  wishlist.delete()
+  try:
+    cart_item = CartItem.objects.get(product=product)
+  except:
+    return redirect(reverse('add_cart',args=[product_id]))
+  return redirect('show_wishlist')
+
+def move_to_wishlist(request, cart_item_id):
+  cart_item = CartItem.objects.get(id=cart_item_id)
+  product = Product.objects.get(id=cart_item.product_id)
+  cart_item.delete()
+  try:
+    wishlist = WishList.objects.get(product=product)
+  except:
+    return redirect(reverse('wishlist',args=[product.id]))
+
+  return redirect('cart')
+
 @login_required(login_url='login')
 def checkout(request):
   if request.user.is_authenticated:
@@ -173,3 +194,5 @@ def checkout(request):
     'tax': tax,
   }
   return render(request,'carts/checkout.html',context)
+
+
