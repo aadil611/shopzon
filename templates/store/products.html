@@ -117,12 +117,23 @@
                     <h3 class="showcase-title">{{product.name}}</h3>
                   </a>
 
-                  <div class="showcase-rating">
+                  {% comment %} <div class="showcase-rating">
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star-outline"></ion-icon>
                     <ion-icon name="star-outline"></ion-icon>
+                    &nbsp;<span>({{product.avg_rating}})</span>
+                  </div> {% endcomment %}
+                  <div class = "showcase-rating">
+                    <span class="review-stars">
+                      <i class="fa-star{% if product.avg_rating == 0.5 %}-half-alt fas{% elif product.avg_rating < 1 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if product.avg_rating == 1.5 %}-half-alt fas{% elif product.avg_rating < 2 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if product.avg_rating == 2.5 %}-half-alt fas{% elif product.avg_rating < 3 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if product.avg_rating == 3.5 %}-half-alt fas{% elif product.avg_rating < 4 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>
+                      <i class="fa-star{% if product.avg_rating == 4.5 %}-half-alt fas{% elif product.avg_rating < 5 %} far {% else %} fas {% endif %}  " aria-hidden="true"></i>
+                    </span>
+                      <span>&nbsp;({{product.review_count}})</span> 
                   </div>
 
                   <div class="price-box">

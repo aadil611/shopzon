@@ -3,7 +3,6 @@
 
 {% block extrahead %}
   <link rel="stylesheet" href="{% static 'assets/css/store/product_details.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 {% endblock %}
 
@@ -17,12 +16,12 @@
                     <img src = "{{product.images.url}}" alt = "{{product.slug}}">
                 </div>
                 <div class = "hover-container">
-                    <div><img src = "{{product.images.url}}"></div>
-                    <div><img src = "{{product.images.url}}"></div>
-                    <div><img src = "{{product.images.url}}"></div>
-                    <div><img src = "{{product.images.url}}"></div>
-                    <div><img src = "{{product.images.url}}"></div>
+                  <div><img src = "{{product.images.url}}"></div>
+                  {% for gallery in product.productgallery_set.all %}
+                    <div><img src = "{{gallery.image.url}}"></div>
+                  {% endfor %}
                 </div>
+                
             </div>
             <div class = "product-div-right">
                 <span class = "product-name">{{product.name}}</span>

@@ -1374,6 +1374,10 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   margin-bottom: 10px;
 }
 
+.product-grid .showcase-rating span{
+  font-size:14px;
+}
+
 .product-grid .price-box {
   display: flex;
   gap: 10px;
