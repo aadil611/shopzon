@@ -1,5 +1,5 @@
 from django.db import models
-from category.models import Category,SubCategory
+# from category.models import Category,SubCategory
 from accounts.models import Account
 from django.db.models import Avg
 
@@ -12,8 +12,8 @@ class Product(models.Model):
   images        = models.ImageField(upload_to='photos/products')
   stock         = models.IntegerField()
   is_available  = models.BooleanField(default=True)
-  category      = models.ForeignKey(Category,on_delete=models.CASCADE)
-  sub_category  = models.ForeignKey(SubCategory,on_delete=models.CASCADE)
+  category      = models.ForeignKey('category.Category',on_delete=models.CASCADE)
+  sub_category  = models.ForeignKey('category.SubCategory',on_delete=models.CASCADE)
   created_date  = models.DateTimeField(auto_now_add=True)
   modified_date = models.DateTimeField(auto_now=True)
 
