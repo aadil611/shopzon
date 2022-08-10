@@ -23,7 +23,7 @@ from store import urls as storeurls
 from utils import views as utilsviews
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('secure_admin/', admin.site.urls),
     path('',views.home,name='home'),
     path('get_sub_category/',get_sub_category),
     path('get_countdown/',utilsviews.get_countdown),

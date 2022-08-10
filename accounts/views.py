@@ -17,6 +17,7 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 import smtplib,ssl
+from decouple import config
 
 # Create your views here.
 def register(request):
@@ -40,14 +41,14 @@ def register(request):
       current_site = get_current_site(request)
       mail_subject = 'Please activate your account'
       message_body = render_to_string('accounts/account_verification.html',{
-        'user':user,
-        'domain':current_site,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': default_token_generator.make_token(user),
+        'user'    : user,
+        'domain'  : current_site,
+        'uid'     : urlsafe_base64_encode(force_bytes(user.pk)),
+        'token'   : default_token_generator.make_token(user),
       })
 
-      sender    = 'gkorigin26@gmail.com'
-      password  = 'kbdjhjffkihmcfxx'
+      sender    = config['EMAIL']
+      password  = config['PASSWORD']
       receiver  = email
       message   = 'Subject: {}\n\n{}'.format(mail_subject, message_body)
       context   = ssl.create_default_context()
@@ -97,10 +98,10 @@ def login(request):
           for item in cart_items:
             variation = list(item.variation.all())
             if variation in ex_variation_list:
-              ex_item_index = ex_variation_list.index(variation)
-              ex_item_id = ids[ex_item_index]
-              ex_item = CartItem.objects.get(id=ex_item_id)
-              ex_item.quantity += item.quantity
+              ex_item_index       = ex_variation_list.index(variation)
+              ex_item_id          = ids[ex_item_index]
+              ex_item             = CartItem.objects.get(id=ex_item_id)
+              ex_item.quantity   += item.quantity
               ex_item.save()
             else:
               try:
@@ -125,8 +126,8 @@ def login(request):
       
       url = request.META.get('HTTP_REFERER')
       try:
-        query = requests.utils.urlparse(url).query
-        params = dict(x.split('=') for x in query.split('&'))
+        query   = requests.utils.urlparse(url).query
+        params  = dict(x.split('=') for x in query.split('&'))
         if 'next' in params:
           nextPage = params['next']
           return redirect(nextPage)
@@ -138,8 +139,8 @@ def login(request):
 
 def activate(request,uid64,token):
   try:
-    uid = urlsafe_base64_decode(uid64).decode()
-    user = Account._default_manager.get(id=uid)
+    uid   = urlsafe_base64_decode(uid64).decode()
+    user  = Account._default_manager.get(id=uid)
   except (ValueError,TypeError,OverflowError,Account.DoesNotExist):
     user = None
 
@@ -162,23 +163,23 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-  paid_orders = Order.objects.filter(user=request.user,is_ordered=True)
-  pending_orders = Order.objects.filter(user=request.user,is_ordered=False)
-  payments = Payment.objects.filter(user=request.user)
-  ordered_products = OrderProduct.objects.filter(user=request.user)
-  user_profile  = UserProfile.objects.filter(user=request.user)
+  paid_orders       = Order.objects.filter(user=request.user,is_ordered=True)
+  pending_orders    = Order.objects.filter(user=request.user,is_ordered=False)
+  payments          = Payment.objects.filter(user=request.user)
+  ordered_products  = OrderProduct.objects.filter(user=request.user)
+  user_profile      = UserProfile.objects.filter(user=request.user)
   if user_profile.exists():
     user_profile = user_profile[0]
   print(' user is ---->',user_profile)
   context = {
-    'paid_orders': paid_orders,
-    'paid_orders_count': paid_orders.count(),
-    'payments': payments,
-    'payments_count': payments.count(),
-    'pending_orders': pending_orders,
-    'pending_orders_count': pending_orders.count(),
-    'ordered_products': ordered_products,
-    'user_profile': user_profile
+    'paid_orders'             : paid_orders,
+    'paid_orders_count'       : paid_orders.count(),
+    'payments'                : payments,
+    'payments_count'          : payments.count(),
+    'pending_orders'          : pending_orders,
+    'pending_orders_count'    : pending_orders.count(),
+    'ordered_products'        : ordered_products,
+    'user_profile'            : user_profile
   }
   return render(request, 'accounts/dashboard.html',context)
 
@@ -195,14 +196,14 @@ def forgot_password(request):
       mail_body    = render_to_string('accounts/reset_password_mail.html',{
         'user'  : user,
         'domain': current_site,
-        'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': default_token_generator.make_token(user)
+        'uid'   : urlsafe_base64_encode(force_bytes(user.pk)),
+        'token' : default_token_generator.make_token(user)
       })
 
-      message = 'Subject: {} \n\n {}'.format(mail_subject, mail_body)
-      sender = 'gkorigin26@gmail.com'
-      password = 'kbdjhjffkihmcfxx'
-      receiver = email
+      message   = 'Subject: {} \n\n {}'.format(mail_subject, mail_body)
+      sender    = config['EMAIL']
+      password  = config['PASSWORD']
+      receiver  = email
 
       context = ssl.create_default_context()
       with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as server:
@@ -220,7 +221,7 @@ def forgot_password(request):
 
 def reset_password_validate(request,uidb64,token):
   try:
-    uid = urlsafe_base64_decode(uidb64).decode()
+    uid   = urlsafe_base64_decode(uidb64).decode()
     user  = Account._default_manager.get(id=uid)
   except:
     user = None
@@ -239,7 +240,7 @@ def reset_password(request):
     confirm_password = request.POST.get('confirm_password')
 
     if password == confirm_password:
-      uid = request.session.get('uid')
+      uid  = request.session.get('uid')
       user = Account.objects.get(id=uid)
       user.set_password(password)
       user.save()
