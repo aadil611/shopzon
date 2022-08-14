@@ -42,7 +42,11 @@ def cart_count(request):
 
 
 def wishlist_count(request):
-  cart = Cart.objects.get(cart_id=_cart_id(request))
+  try:
+    cart = Cart.objects.get(cart_id=_cart_id(request))
+  except:
+    cart = Cart.objects.create(cart_id=_cart_id(request))
+    cart.save()
   wishlist = WishList.objects.filter(cart=cart)
   context = {"wishlist_count": wishlist.count()}
   return context

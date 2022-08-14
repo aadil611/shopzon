@@ -199,6 +199,7 @@ img{
   padding:5px 15px;
   width:50%;
   box-shadow: 1px 1px 5px 2px rgb(76, 196, 72);
+  margin-bottom:20px;
 }
 
 .user-reviews-box .header .review-text { 

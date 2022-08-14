@@ -1,6 +1,6 @@
 from django.db import models
 # from category.models import Category,SubCategory
-from accounts.models import Account
+from accounts.models import Account,UserProfile
 from django.db.models import Avg
 
 # Create your models here.
@@ -70,6 +70,12 @@ class ReviewRating(models.Model):
   def __str__(self):
     return self.subject
 
+  def profile(self):
+    try:
+      profile = UserProfile.objects.get(user = self.user)
+    except:
+      profile = None
+    return profile
 
 class ProductGallery(models.Model):
   product = models.ForeignKey(Product,on_delete=models.CASCADE,default=None)

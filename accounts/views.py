@@ -47,8 +47,8 @@ def register(request):
         'token'   : default_token_generator.make_token(user),
       })
 
-      sender    = config['EMAIL']
-      password  = config['PASSWORD']
+      sender    = config('EMAIL')
+      password  = config('PASSWORD')
       receiver  = email
       message   = 'Subject: {}\n\n{}'.format(mail_subject, message_body)
       context   = ssl.create_default_context()
@@ -201,8 +201,8 @@ def forgot_password(request):
       })
 
       message   = 'Subject: {} \n\n {}'.format(mail_subject, mail_body)
-      sender    = config['EMAIL']
-      password  = config['PASSWORD']
+      sender    = config('EMAIL')
+      password  = config('PASSWORD')
       receiver  = email
 
       context = ssl.create_default_context()

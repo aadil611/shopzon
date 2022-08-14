@@ -122,7 +122,7 @@
     var url = "{% url 'payment' %}";
     var orderID = {{order.order_number}};
     var payment_method = "paypal";
-    var invoice_url = "{% url 'payment_complete' %}";
+    var invoice_url = "{% url 'invoice' %}";
 
 
     paypal.Buttons({

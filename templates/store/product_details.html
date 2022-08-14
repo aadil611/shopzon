@@ -171,7 +171,7 @@
             <div class="user-review">
               <div class="header">
                 <div class="review-text">
-                  <img src="{% static 'assets/images/user.jpeg' %}" alt="">
+                  <img src="{{review.profile.profile_picture.url }}" alt="">
                   <h6> {{review.user.first_name | capfirst}} {{review.user.last_name | capfirst}}</h6>
                   <span class="review-stars">
                       <i class="fa-star{% if review.rating == 0.5 %}-half-alt fas{% elif review.rating < 1 %} far {% else %} fas {% endif %} " aria-hidden="true"></i>

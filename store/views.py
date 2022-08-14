@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Product,ReviewRating
+from accounts.models import UserProfile
 from carts.models import Cart,CartItem,WishList
 from carts.views import _cart_id
 from category.models import Category,SubCategory
@@ -90,7 +91,7 @@ def product_details(request,slug):
 
   try:
     purchased = OrderProduct.objects.filter(user__id=request.user.id,product__slug=slug).exists()
-    reviews = ReviewRating.objects.filter(user__id=request.user.id,product=product)
+    reviews = ReviewRating.objects.filter(product=product)
   except OrderProduct.DoesNotExist:
     purchased = None
 
@@ -99,6 +100,11 @@ def product_details(request,slug):
   if average['avg'] is not None:
     if average['avg'] > 0:
       avg = float(average['avg'])
+
+  try:
+    user_profile = UserProfile.objects.filter(user=request.user)
+  except:
+    user_profile = None
   
   context = {
     'product':product,
@@ -108,7 +114,8 @@ def product_details(request,slug):
     'variations':variations,
     'purchased':purchased,
     'reviews':reviews,
-    'avg_rating':avg
+    'avg_rating':avg,
+    'user_profile':user_profile
   }
   return render(request,'store/product_details.html',context)
 
