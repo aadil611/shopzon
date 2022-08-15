@@ -94,15 +94,7 @@
                 </form>
             </div>
         </div>
-        {% comment %} <div >   
-          <h2> Customer Reviews </h2>
-          <h5> Write your Reviews </h5>
-          <div>
-            <label> How do you rate this product </label>
-
-          </div>
-        </div> {% endcomment %}
-
+        
         <div class="review-box">
           <form action="{% url 'submit_review' %}" method="POST">
             {% csrf_token %}

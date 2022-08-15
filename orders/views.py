@@ -7,6 +7,12 @@ from store.models import Product
 import datetime
 import json
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from mail_sender.tasks import send_mail
+from decouple import config
+
+
 # Create your views here.
 def place_order(request):
   user          = request.user
@@ -59,7 +65,7 @@ def place_order(request):
       return render(request, 'orders/payment.html', context)
 
 
-  return render(request,'orders/invoice.html')
+  return redirect('cart')
 
 
 def payment(request):
@@ -98,6 +104,22 @@ def payment(request):
     product         = Product.objects.get(id=cart_item.product_id)
     product.stock   -= cart_item.quantity
     product.save()
+
+  current_site = get_current_site(request)
+  mail_subject = 'Order confirmation'
+  mail_body    = render_to_string('orders/order_mail.html',{
+    'user'    : request.user,
+    'domain'  : current_site,
+    'order'   : order,
+    'payment' : payment
+  })
+
+  message   = 'Subject: {} \n\n {}'.format(mail_subject, mail_body)
+  sender    = config('EMAIL')
+  password  = config('PASSWORD')
+  receiver  = request.user.email
+
+  send_mail.delay(sender,receiver,password,message)
 
   cart_items.delete()
 

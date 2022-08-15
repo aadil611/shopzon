@@ -18,6 +18,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 import smtplib,ssl
 from decouple import config
+from mail_sender.tasks import send_mail
 
 # Create your views here.
 def register(request):
@@ -51,11 +52,8 @@ def register(request):
       password  = config('PASSWORD')
       receiver  = email
       message   = 'Subject: {}\n\n{}'.format(mail_subject, message_body)
-      context   = ssl.create_default_context()
-
-      with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as server:
-        server.login(sender,password)
-        server.sendmail(sender,receiver,message)
+      
+      send_mail.delay(sender,receiver,password,message)
 
       return redirect('/accounts/login/?command=verification&email='+email)
   else:
@@ -205,10 +203,7 @@ def forgot_password(request):
       password  = config('PASSWORD')
       receiver  = email
 
-      context = ssl.create_default_context()
-      with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as server:
-        server.login(sender,password)
-        server.sendmail(sender,receiver,message)
+      send_mail.delay(sender,receiver,password,message)
 
       messages.success(request,'reset link has been sent to your email')
       return redirect('login')

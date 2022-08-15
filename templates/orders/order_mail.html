@@ -1,0 +1,7 @@
+{% autoescape off %}
+
+Hi {{user.first_name}},
+Your Order (#{{order.order_number}}) has placed successfully with transaction ID:{{payment.payment_id}}
+you can check your order status in your dashboard
+
+{% endautoescape %}
