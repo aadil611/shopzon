@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-()fzj)v6-idz**xisymfj5plogv*s5jkzya=th7m72ns6^^i2^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -175,6 +175,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
+CSRF_TRUSTED_ORIGINS = [
+    'https://shopzon.herokuapp.com'
+]
 
 
 # Celery Setting
