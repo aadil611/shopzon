@@ -2,6 +2,9 @@ from django.db import models
 # from category.models import Category,SubCategory
 from accounts.models import Account,UserProfile
 from django.db.models import Avg
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+import json
 
 # Create your models here.
 class Product(models.Model):
@@ -31,6 +34,25 @@ class Product(models.Model):
       if average['avg'] > 0:
         avg = float(average['avg'])
     return avg
+
+  def save(self,*args,**kwargs):
+    super().save(*args,**kwargs)
+    if self.stock > 0:
+      channel_layer = get_channel_layer() 
+      notifications = StockNotification.objects.filter(product=self,is_sent=False)
+
+      for notification in notifications:
+        msg = self.name + ' is back in stock'
+        async_to_sync(channel_layer.group_send)(
+          notification.user.username,
+          {
+            'type':'send_notification',
+            'message':json.dumps({'message':msg,'slug':self.slug})
+          }
+        )
+        notification.is_sent = True
+        notification.save()
+
 
 class VariationManager(models.Manager):
   def color(self):
@@ -87,3 +109,11 @@ class ProductGallery(models.Model):
   class Meta:
     verbose_name = 'product gallery'
     verbose_name_plural = 'product galleries'
+
+
+class StockNotification(models.Model):
+  user          = models.ForeignKey(Account, on_delete=models.CASCADE)
+  product       = models.ForeignKey(Product, on_delete=models.CASCADE)
+  is_sent       = models.BooleanField(default=False)
+  created_at    = models.DateTimeField(auto_now_add=True)
+

@@ -74,6 +74,7 @@ TEMPLATES = [
                 'shopzon.contextprocessors.cart_count',
                 'shopzon.contextprocessors.categories',
                 'shopzon.contextprocessors.wishlist_count',
+                'shopzon.contextprocessors.notifications',
             ],
         },
     },

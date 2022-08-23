@@ -13,6 +13,7 @@ def _cart_id(request):
   return cart
 
 
+
 def remove_cart(request,product_id,cart_item_id):
   product   = get_object_or_404(Product,id=product_id)
   cart      = get_object_or_404(Cart,cart_id = _cart_id(request))
@@ -22,6 +23,7 @@ def remove_cart(request,product_id,cart_item_id):
     cart_item = get_object_or_404(CartItem,product=product,cart=cart,id=cart_item_id)
   cart_item.delete() 
   return redirect('cart')
+
 
 
 def minus_cart(request,product_id,cart_item_id):
@@ -41,6 +43,9 @@ def minus_cart(request,product_id,cart_item_id):
   except:
     pass
   return redirect('cart')
+
+
+
 
 def add_cart(request,product_id):
   product = Product.objects.get(id=product_id)
@@ -96,6 +101,7 @@ def add_cart(request,product_id):
   return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
+
 def cart(request):
   try:
     if request.user.is_authenticated:
@@ -120,8 +126,6 @@ def cart(request):
       'empty':True
     }
 
-    
-    
   return render(request,'carts/cart.html',context)
 
 

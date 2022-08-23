@@ -22,6 +22,24 @@
       </div>
 
       <div class="header-user-actions">
+
+        <button class="action-btn bell-active" id="user-notification">
+          <a href="#" id="notification-bell" onclick="handleBellClick();">
+            <ion-icon name="notifications-outline" ></ion-icon>
+            <span class="count" id="notification-count">0</span>
+          </a>
+          
+          <ul class="notification-message " id="notification-box"> 
+            <ion-icon name="chevron-up-outline" class="uparrow"></ion-icon>
+            {% if request.user.is_authenticated %}
+              {% for notification in notifications %}
+                <li > <a href="{% url 'product_details' notification.product.slug %}">{{notification.product.name}} is back in stock</a></li>
+              {% endfor %}
+            {% endif %}
+            
+          </ul>
+        </button>
+
         {% if user.is_authenticated %}
           <button class="action-btn">
             <a href="{% url 'dashboard' %}">
@@ -214,7 +232,7 @@
     <ul class="mobile-menu-category-list">
 
       <li class="menu-category">
-        <a href="#" class="menu-title">Home</a>
+        <a href="{% url 'home' %}" class="menu-title">Home</a>
       </li>
 
       {% for category in categories %}

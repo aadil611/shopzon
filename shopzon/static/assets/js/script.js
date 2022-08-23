@@ -89,6 +89,7 @@ if( window.location.pathname === '/') {
 
 
 
+  /**********  Notification Toast construction   ***********/
 
   var notification_url    = "http://127.0.0.1:8000/store/get_notification/"
   var toastTitle          = document.getElementById('not_name');
@@ -179,7 +180,7 @@ if( window.location.pathname.indexOf('/product_details/') >= 0 ) {
   const handleWishlist = function(){
     var colorelem = document.getElementById('select-color');
     var sizeelem  = document.getElementById('select-size');
-    colorelem.value = olorelem.options[1].value;
+    colorelem.value = colorelem.options[1].value;
     sizeelem.value = 'temp';
   }
 
@@ -272,35 +273,90 @@ if(window.location.href.indexOf('register/')>=0 || window.location.href.indexOf(
     //     container.classList.remove("active");
     // });
 
-
 }
+
+
+
+
+/************ Consuming WebSocket ************/
+
+
+if(is_logged_in){
+  let socket = new WebSocket("ws://localhost:8000/ws/notification/");
+  console.log('starting Websocket code section');
+
+  socket.onopen = function(event){
+    console.log('connection established');
+    socket.send(JSON.stringify({"room_name":"notification","room_group_name":username}));
+  };
+
+  console.log(username);
+
+  socket.onmessage = function(event){
+    var notification_count = document.getElementById('notification-count');
+    var notification_box   = document.getElementById('notification-box');
+    var data = JSON.parse(event.data);
+    var message = JSON.parse(data.message);
+    product_details_url = product_details_url.replace("slug",message.slug);
+    console.log(product_details_url);
+    notification_count.textContent = parseInt(notification_count.textContent) + 1 + ' new';
+    notification_box.innerHTML += `<span class="new-notification"></span><li><a href=" "> ${message.message}</a></li>`;
+  };
+
+  socket.onclose = function(event){
+    console.log('connections closed unexpectedly',event.data);
+  }
+
+
+
+  // handleNotifyMe = function(){
+    // let room_group_name = document.getElementById('room_group_name').value;
+    // socket.send(JSON.stringify({"room_name":"defroom","room_group_name":room_group_name}));
+  // };
+}
+
+
+
+
+
+/********** Model Notification alerts *********/
 
 const alert_toast = document.getElementById("alert-toast"),
       closeIcon = document.getElementById("alert-close"),
       alert_progress = document.getElementById("alert-progress");
 
       let timer1, timer2;
+      if(alert_toast != null & closeIcon != null & alert_progress != null){
+        document.addEventListener("DOMContentLoaded", () => {
+          alert_toast.classList.add("alert-active");
+          alert_progress.classList.add("alert-active");
 
-      document.addEventListener("DOMContentLoaded", () => {
-        alert_toast.classList.add("alert-active");
-        alert_progress.classList.add("alert-active");
+          timer1 = setTimeout(() => {
+              alert_toast.classList.remove("alert-active");
+          }, 5000); //1s = 1000 milliseconds
 
-        timer1 = setTimeout(() => {
-            alert_toast.classList.remove("alert-active");
-        }, 5000); //1s = 1000 milliseconds
-
-        timer2 = setTimeout(() => {
-          alert_progress.classList.remove("alert-active");
-        }, 5300);
-      });
-      
-      closeIcon.addEventListener("click", () => {
-        alert_toast.classList.remove("alert-active");
+          timer2 = setTimeout(() => {
+            alert_progress.classList.remove("alert-active");
+          }, 5300);
+        });
         
-        setTimeout(() => {
-          alert_progress.classList.remove("alert-active");
-        }, 300);
+        closeIcon.addEventListener("click", () => {
+          alert_toast.classList.remove("alert-active");
+          
+          setTimeout(() => {
+            alert_progress.classList.remove("alert-active");
+          }, 300);
 
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-      });
+          clearTimeout(timer1);
+          clearTimeout(timer2);
+        });
+      }
+
+
+
+/************* handle notification click ***************/
+function handleBellClick(){
+  console.log('i got you');
+  var notification_box = document.getElementById("notification-box");
+  notification_box.classList.toggle("notification-active");
+}

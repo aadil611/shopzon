@@ -67,23 +67,31 @@
                     {{product.id | json_script:'product_id'}}
                   {% endif %}
 
+                  <input type="hidden" id="room_group_name" value="{{product.slug}}" />
+
                   {% if in_stock %}
                     <div class = "btn-groups">
                       
                       <button type="submit" id="addCart"  formaction="{% url 'add_cart' product.id %}" class="btn add-cart-btn"><i class = "fas fa-shopping-cart" id="cart-btn"></i> add to cart</button>
 
-                      <button type="submit"  href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </button>
+                      {% comment %} <button type="submit"  href="#" style="color:white;" class = "buy-now-btn btn"><i class = "fas fa-wallet"></i> buy now </button> {% endcomment %}
 
                       {% if not in_wishlist %}
                         <a href="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</a>
                       {% else %}
-                      <a href={% url 'remove_wishlist' product.id %} class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</a>
+                        <a href={% url 'remove_wishlist' product.id %} class="btn add-cart-btn done"><i class = "fas fa-fas fa-check-double"></i> Wishlisted</a>
                       {% endif %}
                     </div>
                   {% else %}
                     <div class = "btn-groups">
                       <h2 style="color:red;"> Out Of Stock </h2><br>
-                      <button type="submit" class = "buy-now-btn btn" title="We will notify once item in stock"><i class = "fas fa-bell"></i> Notify</button>
+                      {% if notify_me %}
+                        <a href={% url 'notify_me' product.id %} class="btn add-cart-btn done"><i class="fas fa-bell-slash"></i> You will be notified </a>
+                      {% else %}
+                        <button type="submit" formaction="{% url 'notify_me' product.id %}" class = "buy-now-btn btn" title="We will notify once item in stock">
+                          <i class = "fas fa-bell"></i> Notify Me
+                        </button>
+                      {% endif %}
                       {% if not in_wishlist %}
                         <button type="submit" formaction="{% url 'wishlist' product.id %}" class="btn add-cart-btn"><i class = "fas fa-heart"></i> Wishlist</button>
                       {% else %}

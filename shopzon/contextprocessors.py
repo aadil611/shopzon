@@ -6,6 +6,7 @@ from channels.layers import get_channel_layer
 from category.models import Category
 from carts.views import _cart_id
 from carts.models import Cart, CartItem, WishList
+from store.models import StockNotification
 
 channel_layer = get_channel_layer()
 
@@ -56,4 +57,20 @@ def categories(request):
   categories = Category.objects.all().order_by("id")
   # categories = dict({'categories':categories})
   context = {"categories": categories}
+  return context
+
+
+def notifications(request):
+  notifications = StockNotification.objects.filter(user=request.user.id).order_by('created_at')
+  notification_count = notifications.count()
+  if notification_count > 5:
+    cnt = 0
+    for notification in notifications:
+      if cnt < (notification_count - 5):
+        notification.delete()
+      else:
+        break
+      cnt += 1 
+
+  context = {"notifications": notifications}
   return context

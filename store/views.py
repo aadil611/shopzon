@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,ReviewRating
+from .models import Product,ReviewRating,StockNotification
 from accounts.models import UserProfile
 from carts.models import Cart,CartItem,WishList
 from carts.views import _cart_id
@@ -12,7 +12,11 @@ from .forms import ReviewRatingForm
 from orders.models import OrderProduct
 from django.contrib import messages
 from django.db.models import Avg
+from django.contrib.auth.decorators import login_required
 import json
+from django.urls import reverse
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 # Create your views here
 def products(request,category_slug):
@@ -105,17 +109,21 @@ def product_details(request,slug):
     user_profile = UserProfile.objects.filter(user=request.user)
   except:
     user_profile = None
+
+  notifications = StockNotification.objects.filter(user=request.user,product=product,is_sent=True)
   
   context = {
-    'product':product,
-    'in_stock':in_stock,
-    'in_wishlist':in_wishlist,
-    'in_cart':in_cart,
-    'variations':variations,
-    'purchased':purchased,
-    'reviews':reviews,
-    'avg_rating':avg,
-    'user_profile':user_profile
+    'product'               : product,
+    'in_stock'              : in_stock,
+    'in_wishlist'           : in_wishlist,
+    'in_cart'               : in_cart,
+    'variations'            : variations,
+    'purchased'             : purchased,
+    'reviews'               : reviews,
+    'avg_rating'            : avg,
+    'user_profile'          : user_profile,
+    'notify_me'             : StockNotification.objects.filter(user=request.user,product=product,is_sent=False).exists(),
+    'notification_count'    : notifications.count()
   }
   return render(request,'store/product_details.html',context)
 
@@ -159,3 +167,15 @@ def submit_review(request):
         messages.success(request,'Review submitted successfully')
 
   return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required(login_url='login')
+def notify_me(request,product_id):
+  product = get_object_or_404(Product,id=product_id)
+  try:
+    notification = StockNotification.objects.get(user=request.user,product=product,is_sent=False)
+    notification.delete()
+  except:
+    StockNotification.objects.create(user=request.user,product=product)
+  return redirect(reverse('product_details',args=[product.slug,]))
+
