@@ -61,7 +61,7 @@ def categories(request):
 
 
 def notifications(request):
-  notifications = StockNotification.objects.filter(user=request.user.id).order_by('created_at')
+  notifications = StockNotification.objects.filter(user=request.user.id,is_sent=True).order_by('created_at')
   notification_count = notifications.count()
   if notification_count > 5:
     cnt = 0
