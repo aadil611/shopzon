@@ -237,7 +237,7 @@ if( window.location.pathname.indexOf('/product_details/') >= 0 ) {
   } */
 }
 
-if(window.location.href.indexOf('register/')>=0 || window.location.href.indexOf('reset_password/')>=0){
+if(window.location.href.indexOf('register/')>=0 || window.location.href.indexOf('reset_password/')>=0 || window.location.href.indexOf('login/')>=0){
   const container = document.querySelector(".rcontainer"),
       pwShowHide = document.querySelectorAll(".showHidePw"),
       pwFields = document.querySelectorAll(".password"),

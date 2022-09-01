@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-()fzj)v6-idz**xisymfj5plogv*s5jkzya=th7m72ns6^^i2^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -97,9 +97,9 @@ DATABASES = {
     }
 }
 
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+# import dj_database_url
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
 # CHANNEL_LAYERS CONFIGURATION
 
@@ -175,12 +175,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
+CSRF_TRUSTED_ORIGINS = [
+    'https://shopzon.herokuapp.com'
+]
 
 
 # Celery Setting
 
 # CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_BROKER_URL = os.environ['REDIS_URL']
+CELERY_BROKER_URL = os.environ.get('REDIS_URL','redis://localhost:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

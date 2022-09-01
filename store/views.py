@@ -110,8 +110,13 @@ def product_details(request,slug):
   except:
     user_profile = None
 
-  notifications = StockNotification.objects.filter(user=request.user,product=product,is_sent=True)
-  
+  try:
+    notification_count = StockNotification.objects.filter(user=request.user,product=product,is_sent=True).count()
+    is_notify_me  = StockNotification.objects.filter(user=request.user,product=product,is_sent=False).exists()
+  except:
+    notification_count = None
+    is_notify_me = None
+
   context = {
     'product'               : product,
     'in_stock'              : in_stock,
@@ -122,8 +127,8 @@ def product_details(request,slug):
     'reviews'               : reviews,
     'avg_rating'            : avg,
     'user_profile'          : user_profile,
-    'notify_me'             : StockNotification.objects.filter(user=request.user,product=product,is_sent=False).exists(),
-    'notification_count'    : notifications.count()
+    'notify_me'             : is_notify_me,
+    'notification_count'    : notification_count
   }
   return render(request,'store/product_details.html',context)
 

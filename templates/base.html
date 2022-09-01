@@ -43,7 +43,7 @@
   <script type="text/javascript">
     var host = "{{ request.get_host }}";
     var is_logged_in = "{{ request.user.is_authenticated }}";
-    var username = "";
+    var username = "guest";
     var product_details_url = "{% url 'product_details' 'slug' %}";
     if(is_logged_in) {
       username = "{{request.user.username}}";
